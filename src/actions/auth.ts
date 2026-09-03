@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -71,6 +73,38 @@ export async function signupAction(formData: FormData): Promise<AuthResponse> {
 }
 
 /**
+ * Actualizar Perfil de Usuario / Administrador
+ */
+export async function updateProfileAction(formData: FormData): Promise<AuthResponse> {
+  const user = await getCurrentUser();
+  if (!user) {
+    return { error: "No autorizado. Inicia sesión para continuar." };
+  }
+
+  const firstName = (formData.get("firstName") as string) || "";
+  const lastName = (formData.get("lastName") as string) || "";
+  const phone = (formData.get("phone") as string) || "";
+
+  try {
+    await prisma.profile.update({
+      where: { id: user.id },
+      data: {
+        firstName: firstName.trim() || null,
+        lastName: lastName.trim() || null,
+        phone: phone.trim() || null,
+      },
+    });
+
+    revalidatePath("/admin", "layout");
+    revalidatePath("/admin/perfil");
+    revalidatePath("/cuenta");
+    return { success: true };
+  } catch (error: any) {
+    return { error: error?.message || "No se pudo actualizar el perfil." };
+  }
+}
+
+/**
  * Cerrar sesión
  */
 export async function logoutAction() {
@@ -79,3 +113,4 @@ export async function logoutAction() {
   revalidatePath("/", "layout");
   redirect("/auth/login");
 }
+
