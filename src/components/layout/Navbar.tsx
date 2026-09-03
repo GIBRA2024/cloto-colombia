@@ -249,7 +249,7 @@ export function Navbar() {
                 </svg>
               </button>
 
-              {/* Cuenta / Admin */}
+              {/* Cuenta */}
               <Link
                 href="/cuenta"
                 className="p-1.5 text-[#1c1917] hover:text-[#b6a450] transition-colors hidden sm:inline-block"
@@ -258,15 +258,6 @@ export function Navbar() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-              </Link>
-
-              {/* Acceso directo a Admin (para administradores) */}
-              <Link
-                href="/admin"
-                className="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 bg-stone-200/70 hover:bg-[#b6a450] hover:text-white rounded transition-colors hidden md:inline-block"
-                title="Panel de Administración"
-              >
-                Admin
               </Link>
 
               {/* Botón Carrito */}
@@ -384,13 +375,6 @@ export function Navbar() {
                 className="block text-[#1c1917]"
               >
                 Mi Cuenta & Direcciones
-              </Link>
-              <Link
-                href="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-stone-600 font-medium"
-              >
-                Panel de Administración (Admin)
               </Link>
             </div>
           </div>

@@ -24,7 +24,7 @@ export async function loginAction(formData: FormData): Promise<AuthResponse> {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -33,8 +33,25 @@ export async function loginAction(formData: FormData): Promise<AuthResponse> {
     return { error: error.message };
   }
 
+  let targetUrl = redirectTo;
+  if (data?.user) {
+    try {
+      const profile = await prisma.profile.findUnique({
+        where: { id: data.user.id },
+        select: { role: true },
+      });
+
+      if (profile?.role === "ADMIN" || profile?.role === "STAFF") {
+        targetUrl = redirectTo && redirectTo.startsWith("/admin") ? redirectTo : "/admin";
+      }
+    } catch (e) {
+      console.error("Error al consultar rol de usuario en login:", e);
+    }
+  }
+
   revalidatePath("/", "layout");
-  redirect(redirectTo);
+  revalidatePath("/admin", "layout");
+  redirect(targetUrl);
 }
 
 /**
