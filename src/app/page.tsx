@@ -316,133 +316,138 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 5. EXPLORADOR INTERACTIVO DE PIJAMAS (Selector Estilo x Corte) */}
-      <section className="bg-white py-16 border-y border-[#dfd8cb]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          <div className="text-center space-y-2 max-w-2xl mx-auto">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#8d9773] font-semibold">
-              Guía de Estilos Cloto Pijamas
-            </span>
-            <h2 className="font-serif-title text-3xl sm:text-4xl text-[#1c1917]">
-              Encuentra tu Pijama Perfecta
+      {/* 5. BANNER EDITORIAL & GRID VISUAL DE SILUETAS CLOTO */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        {/* Banner Editorial Central */}
+        <div className="relative rounded-3xl overflow-hidden bg-[#1c1917] text-[#f2f1e7] shadow-xl border border-stone-800">
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1920&q=80"
+              alt="Cloto Pijamas Ritual de Descanso"
+              fill
+              className="object-cover object-center opacity-30 mix-blend-luminosity scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#1c1917] via-[#1c1917]/90 to-transparent" />
+          </div>
+
+          <div className="relative z-10 p-8 sm:p-12 lg:p-14 max-w-2xl space-y-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#b6a450]/15 border border-[#b6a450]/30 text-[#b6a450] text-[10px] uppercase tracking-[0.25em] font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#b6a450]" />
+              <span>Cloto Pijamas • Ritual de Descanso</span>
+            </div>
+
+            <h2 className="font-serif-title text-3xl sm:text-4xl lg:text-5xl font-light leading-tight tracking-wide text-white">
+              El Arte de Habitar <br />
+              <span className="italic font-normal text-[#b6a450]">tu Propio Espacio</span>
             </h2>
-            <p className="font-serif-body text-xs sm:text-sm text-stone-600">
-              Explora por tu diseño favorito: tirantes frescos, corte camisero tradicional o siluetas relajadas.
+
+            <p className="font-serif-body text-xs sm:text-sm text-stone-300 leading-relaxed max-w-lg">
+              Prendas confeccionadas con intención para acompañar tus noches y momentos de calma. Texturas fluidas, caídas suaves y cortes pensados para el descanso consciente.
             </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Estilo 1: Básica (Tiras) */}
-            <div className="bg-[#f2f1e7] p-6 sm:p-8 rounded-2xl border border-[#dfd8cb] space-y-5 flex flex-col justify-between">
-              <div className="space-y-3">
-                <span className="text-xs uppercase tracking-widest text-[#b6a450] font-bold">
-                  Estilo 01
-                </span>
-                <h3 className="font-serif-title text-2xl text-[#1c1917]">
-                  Pijama Básica (Tiras)
-                </h3>
-                <p className="font-serif-body text-xs text-stone-600 leading-relaxed">
-                  Tirantes finos regulables y caída fluida. Diseños frescos, ligeros y versátiles en satín suave y algodón orgánico.
-                </p>
-              </div>
-
-              <div className="space-y-2 pt-4 border-t border-[#dfd8cb]">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-stone-700">
-                  Cortes Disponibles:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=pijama-basica&corte=short" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Con Short
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=pijama-basica&corte=pantalon" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Con Pantalón
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=pijama-basica&corte=capri" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Con Capri
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=pijama-basica&corte=pescador" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Con Pescador
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=batola-basica" className="text-xs px-3 py-1 bg-[#1c1917] text-white hover:bg-[#b6a450] rounded transition-colors">
-                    Batola Básica
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            {/* Estilo 2: Clásica (Camisera) */}
-            <div className="bg-[#f2f1e7] p-6 sm:p-8 rounded-2xl border border-[#dfd8cb] space-y-5 flex flex-col justify-between">
-              <div className="space-y-3">
-                <span className="text-xs uppercase tracking-widest text-[#b6a450] font-bold">
-                  Estilo 02
-                </span>
-                <h3 className="font-serif-title text-2xl text-[#1c1917]">
-                  Pijama Clásica (Camisera)
-                </h3>
-                <p className="font-serif-body text-xs text-stone-600 leading-relaxed">
-                  Elegancia atemporal con camisa abotonada al frente, cuello solapa refinado y vivos contrastantes de alta costura.
-                </p>
-              </div>
-
-              <div className="space-y-2 pt-4 border-t border-[#dfd8cb]">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-stone-700">
-                  Cortes Disponibles:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=pijama-clasica&corte=short" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Con Short
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=pijama-clasica&corte=pantalon" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Con Pantalón
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=pijama-clasica&corte=capri" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Con Capri
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=pijama-clasica&corte=pescador" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Con Pescador
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=batola-clasica" className="text-xs px-3 py-1 bg-[#1c1917] text-white hover:bg-[#b6a450] rounded transition-colors">
-                    Batola Camisera
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            {/* Estilo 3: Casual & Loungewear */}
-            <div className="bg-[#f2f1e7] p-6 sm:p-8 rounded-2xl border border-[#dfd8cb] space-y-5 flex flex-col justify-between">
-              <div className="space-y-3">
-                <span className="text-xs uppercase tracking-widest text-[#b6a450] font-bold">
-                  Estilo 03
-                </span>
-                <h3 className="font-serif-title text-2xl text-[#1c1917]">
-                  Casual & Batas
-                </h3>
-                <p className="font-serif-body text-xs text-stone-600 leading-relaxed">
-                  Prendas relajadas tipo kimono, batas envolventes y conjuntos suaves para habitar tu hogar con total distinción.
-                </p>
-              </div>
-
-              <div className="space-y-2 pt-4 border-t border-[#dfd8cb]">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-stone-700">
-                  Cortes Disponibles:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <Link href="/catalogo?linea=cloto-pijamas&categoria=ropa-descanso-batas" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Batas & Kimonos
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=pijama-casual&corte=short" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Casual Short
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=pijama-casual&corte=pantalon" className="text-xs px-3 py-1 bg-white hover:bg-[#b6a450] hover:text-white rounded border border-[#dfd8cb] transition-colors">
-                    Casual Pantalón
-                  </Link>
-                  <Link href="/catalogo?linea=cloto-pijamas&estilo=batola-casual" className="text-xs px-3 py-1 bg-[#1c1917] text-white hover:bg-[#b6a450] rounded transition-colors">
-                    Batola Casual
-                  </Link>
-                </div>
-              </div>
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <Link
+                href="/catalogo?linea=cloto-pijamas"
+                className="bg-[#b6a450] hover:bg-[#a39242] text-stone-950 font-bold text-xs uppercase tracking-widest px-6 py-3.5 rounded-xl transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2"
+              >
+                <span>Explorar Colección de Pijamas</span>
+                <span>&rarr;</span>
+              </Link>
+              <Link
+                href="/catalogo?linea=cloto-pijamas&categoria=ropa-descanso-batas"
+                className="bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs uppercase tracking-widest font-semibold px-5 py-3.5 rounded-xl transition-all backdrop-blur-sm"
+              >
+                Batas & Kimonos
+              </Link>
             </div>
           </div>
+        </div>
+
+        {/* Trío de Siluetas en Grid Fotográfico Editorial */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Silueta 01: Básicas de Tiras */}
+          <Link
+            href="/catalogo?linea=cloto-pijamas&estilo=pijama-basica"
+            className="group relative h-84 rounded-2xl overflow-hidden border border-[#dfd8cb] shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-end p-6"
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=85"
+              alt="Pijamas Básicas de Tiras"
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1c1917]/95 via-[#1c1917]/45 to-transparent" />
+            <div className="relative z-10 space-y-1 text-[#f2f1e7]">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-[#b6a450] font-bold">
+                Silueta 01
+              </span>
+              <h3 className="font-serif-title text-xl text-white group-hover:text-[#b6a450] transition-colors">
+                Básica de Tiras
+              </h3>
+              <p className="text-xs text-stone-300 line-clamp-1">
+                Tirantes regulables, siluetas frescas y caída fluida.
+              </p>
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#b6a450] pt-1 group-hover:translate-x-1 transition-transform">
+                Ver siluetas en catálogo &rarr;
+              </span>
+            </div>
+          </Link>
+
+          {/* Silueta 02: Clásica Camisera */}
+          <Link
+            href="/catalogo?linea=cloto-pijamas&estilo=pijama-clasica"
+            className="group relative h-84 rounded-2xl overflow-hidden border border-[#dfd8cb] shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-end p-6"
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=800&q=85"
+              alt="Pijamas Clásicas Camiseras"
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1c1917]/95 via-[#1c1917]/45 to-transparent" />
+            <div className="relative z-10 space-y-1 text-[#f2f1e7]">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-[#b6a450] font-bold">
+                Silueta 02
+              </span>
+              <h3 className="font-serif-title text-xl text-white group-hover:text-[#b6a450] transition-colors">
+                Clásica Camisera
+              </h3>
+              <p className="text-xs text-stone-300 line-clamp-1">
+                Camisa abotonada, cuello solapa y vivos contrastantes.
+              </p>
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#b6a450] pt-1 group-hover:translate-x-1 transition-transform">
+                Ver siluetas en catálogo &rarr;
+              </span>
+            </div>
+          </Link>
+
+          {/* Silueta 03: Batas & Loungewear */}
+          <Link
+            href="/catalogo?linea=cloto-pijamas&categoria=ropa-descanso-batas"
+            className="group relative h-84 rounded-2xl overflow-hidden border border-[#dfd8cb] shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-end p-6"
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=85"
+              alt="Batas y Kimonos de Descanso"
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1c1917]/95 via-[#1c1917]/45 to-transparent" />
+            <div className="relative z-10 space-y-1 text-[#f2f1e7]">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-[#b6a450] font-bold">
+                Silueta 03
+              </span>
+              <h3 className="font-serif-title text-xl text-white group-hover:text-[#b6a450] transition-colors">
+                Batas & Loungewear
+              </h3>
+              <p className="text-xs text-stone-300 line-clamp-1">
+                Prendas relajadas tipo kimono y batas envolventes.
+              </p>
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#b6a450] pt-1 group-hover:translate-x-1 transition-transform">
+                Ver siluetas en catálogo &rarr;
+              </span>
+            </div>
+          </Link>
         </div>
       </section>
 

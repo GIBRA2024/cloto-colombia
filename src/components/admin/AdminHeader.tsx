@@ -119,7 +119,10 @@ export function AdminHeader({ profile, onToggleSidebar }: AdminHeaderProps) {
                 <p className="text-xs font-semibold text-white truncate">{fullName}</p>
                 <p className="text-[11px] text-stone-400 truncate">{profile?.email}</p>
                 <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#b6a450]/15 text-[#b6a450] text-[10px] font-bold uppercase tracking-wider">
-                  <span>🛡️</span> Rol {profile?.role || "ADMIN"}
+                  <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                  </svg>
+                  <span>Rol {profile?.role || "ADMIN"}</span>
                 </div>
               </div>
 

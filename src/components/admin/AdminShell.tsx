@@ -21,7 +21,7 @@ export function AdminShell({ profile, children }: AdminShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-[#f8f7f4] font-sans-ui text-stone-900 antialiased selection:bg-[#b6a450]/20 selection:text-stone-900">
+    <div className="h-screen flex bg-[#f8f7f4] font-sans-ui text-stone-900 antialiased selection:bg-[#b6a450]/20 selection:text-stone-900 overflow-hidden">
       {/* Sidebar Administrativo */}
       <AdminSidebar
         profile={profile}
@@ -30,13 +30,13 @@ export function AdminShell({ profile, children }: AdminShellProps) {
       />
 
       {/* Contenedor Principal (Header + Contenido) */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         <AdminHeader
           profile={profile}
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         />
 
-        <main className="flex-1 p-4 sm:p-8 lg:p-10 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-8 lg:p-10 overflow-y-auto min-h-0">
           {children}
         </main>
       </div>

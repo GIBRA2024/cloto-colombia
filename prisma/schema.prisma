@@ -464,3 +464,25 @@ model Review {
   @@index([profileId])
   @@map("reviews")
 }
+
+// ------------------------------------------------------
+// CRM / NEWSLETTER SUSCRIPTORES & LEADS
+// ------------------------------------------------------
+
+model NewsletterSubscriber {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  name         String?
+  source       String   @default("FOOTER_NEWSLETTER")
+  status       String   @default("SUBSCRIBED") // SUBSCRIBED, UNSUBSCRIBED, CUSTOMER
+  discountSent Boolean  @default(true)
+  couponCode   String?  @default("CLOTO10")
+  notes        String?  @db.Text
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([email])
+  @@index([status])
+  @@map("newsletter_subscribers")
+}
+

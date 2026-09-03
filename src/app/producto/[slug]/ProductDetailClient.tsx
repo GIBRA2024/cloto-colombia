@@ -31,6 +31,7 @@ type ProductData = {
   id: string;
   name: string;
   slug: string;
+  isHomeProduct?: boolean;
   shortDescription?: string | null;
   description: string;
   basePrice: number | any;
@@ -190,9 +191,9 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
   // Enlace WhatsApp con mensaje personalizado
   const whatsappNumber = "573100000000";
   const whatsappText = encodeURIComponent(
-    `¡Hola Cloto! ✨ Me interesa la prenda "${product.name}"${
+    `¡Hola Cloto! ✨ Me interesa ${product.isHomeProduct ? "el producto de hogar" : "la prenda"} "${product.name}"${
       selectedVariant?.color ? ` en color ${selectedVariant.color}` : ""
-    }${selectedVariant?.size ? ` talla ${selectedVariant.size}` : ""}. ¿Podrían asesorarme con las medidas y disponibilidad?`
+    }${selectedVariant?.size ? ` (${product.isHomeProduct ? "medida" : "talla"} ${selectedVariant.size})` : ""}. ¿Podrían asesorarme con la disponibilidad y detalles?`
   );
 
   return (
@@ -321,20 +322,23 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
             </div>
           )}
 
-          {/* Selector de Tallas */}
+          {/* Selector de Tallas o Medidas */}
           {availableSizes.length > 0 && (
             <div className="space-y-2.5">
               <div className="flex justify-between items-center">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-[#1c1917]">
-                  Talla: <span className="font-normal text-stone-600">{selectedVariant?.size || "Seleccionar"}</span>
+                  {product.isHomeProduct ? "Medida / Formato:" : "Talla:"}{" "}
+                  <span className="font-normal text-stone-600">{selectedVariant?.size || "Seleccionar"}</span>
                 </label>
-                <button
-                  type="button"
-                  onClick={() => setActiveAccordion("guia-tallas")}
-                  className="text-[11px] text-[#b6a450] hover:underline font-medium"
-                >
-                  📏 Guía de tallas
-                </button>
+                {!product.isHomeProduct && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveAccordion("guia-tallas")}
+                    className="text-[11px] text-[#b6a450] hover:underline font-medium"
+                  >
+                    📏 Guía de tallas
+                  </button>
+                )}
               </div>
               <div className="grid grid-cols-4 gap-2">
                 {availableSizes.map((sz) => {
@@ -362,7 +366,7 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
           <div className="text-xs">
             {isOutOfStock ? (
               <p className="text-[#834442] font-semibold flex items-center gap-1.5">
-                <span>✕</span> Prenda agotada en esta talla/color
+                <span>✕</span> {product.isHomeProduct ? "Producto agotado en esta opción" : "Prenda agotada en esta talla/color"}
               </p>
             ) : isLowStock ? (
               <p className="text-[#8c7b30] font-semibold flex items-center gap-1.5 animate-pulse">
@@ -423,14 +427,18 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
             </button>
           </div>
 
-          {/* BOTÓN ASESORÍA PERSONALIZADA WHATSAPP (Estrategia de Mercadeo) */}
+          {/* BOTÓN ASESORÍA PERSONALIZADA WHATSAPP */}
           <div className="p-4 bg-white rounded-xl border border-[#dfd8cb] space-y-2">
             <div className="flex items-center gap-2 text-xs font-semibold text-[#1c1917]">
-              <span>💬</span>
-              <span>¿Tienes dudas con tu talla, tela o ajuste?</span>
+              <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a.75.75 0 01-.818-.818 5.97 5.97 0 011.057-3.035C4.607 15.65 4 13.91 4 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+              </svg>
+              <span>{product.isHomeProduct ? "¿Dudas con las medidas, telas o decoración?" : "¿Tienes dudas con tu talla, tela o ajuste?"}</span>
             </div>
             <p className="text-[11px] text-stone-500 font-serif-body">
-              Habla directamente con nuestra asesora de imagen por WhatsApp para una atención personalizada.
+              {product.isHomeProduct
+                ? "Escríbenos directamente por WhatsApp para coordinar medidas especiales de mesa, cama o asesoría de espacios."
+                : "Habla directamente con nuestra asesora de imagen por WhatsApp para una atención personalizada."}
             </p>
             <a
               href={`https://wa.me/${whatsappNumber}?text=${whatsappText}`}
@@ -442,9 +450,9 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
             </a>
           </div>
 
-          {/* ACORDEONES EDITORIALES (Telas, Guía de Tallas, Cuidados, Empaque) */}
+          {/* ACORDEONES EDITORIALES (Telas, Guía de Tallas / Dimensiones, Cuidados, Empaque) */}
           <div className="border-t border-[#dfd8cb] pt-4 space-y-2">
-            {/* Acordeón 1: Composición & Telas Orgánicas */}
+            {/* Acordeón 1: Composición & Fibras */}
             <div className="border border-[#dfd8cb] rounded-lg bg-white overflow-hidden">
               <button
                 type="button"
@@ -453,7 +461,7 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                 }
                 className="w-full px-4 py-3 text-left flex justify-between items-center text-xs font-semibold text-[#1c1917]"
               >
-                <span>🌱 Composición & Fibras Orgánicas</span>
+                <span>🌱 {product.isHomeProduct ? "Materiales & Confección de Hogar" : "Composición & Fibras Orgánicas"}</span>
                 <span>{activeAccordion === "composicion" ? "−" : "+"}</span>
               </button>
               {activeAccordion === "composicion" && (
@@ -462,47 +470,84 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                     {product.description}
                   </p>
                   <div className="text-[11px] text-[#8d9773] font-sans-ui font-medium space-y-1 pt-1 border-t border-stone-100">
-                    <p>✓ Confeccionado en fibras nobles seleccionadas: Algodón orgánico y Seda.</p>
+                    <p>✓ Confeccionado con materiales seleccionados de alta nobleza y durabilidad.</p>
                     <p>✓ 100% Hecho en talleres éticos de Colombia con conciencia ambiental.</p>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Acordeón 2: Guía de Tallas */}
-            <div className="border border-[#dfd8cb] rounded-lg bg-white overflow-hidden">
-              <button
-                type="button"
-                onClick={() =>
-                  setActiveAccordion(activeAccordion === "guia-tallas" ? null : "guia-tallas")
-                }
-                className="w-full px-4 py-3 text-left flex justify-between items-center text-xs font-semibold text-[#1c1917]"
-              >
-                <span>📏 Guía de Medidas (cm)</span>
-                <span>{activeAccordion === "guia-tallas" ? "−" : "+"}</span>
-              </button>
-              {activeAccordion === "guia-tallas" && (
-                <div className="px-4 pb-4 text-xs text-stone-600 space-y-2 border-t border-stone-100 pt-2 font-sans-ui">
-                  <table className="w-full text-left text-[11px]">
-                    <thead>
-                      <tr className="border-b border-stone-200 text-stone-900 font-semibold">
-                        <th className="py-1">Talla</th>
-                        <th className="py-1">Busto (cm)</th>
-                        <th className="py-1">Cintura (cm)</th>
-                        <th className="py-1">Cadera (cm)</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-stone-100">
-                      <tr><td className="py-1 font-bold">XS</td><td>82-86</td><td>62-66</td><td>88-92</td></tr>
-                      <tr><td className="py-1 font-bold">S</td><td>86-90</td><td>66-70</td><td>92-96</td></tr>
-                      <tr><td className="py-1 font-bold">M</td><td>90-96</td><td>70-76</td><td>96-102</td></tr>
-                      <tr><td className="py-1 font-bold">L</td><td>96-102</td><td>76-82</td><td>102-108</td></tr>
-                      <tr><td className="py-1 font-bold">XL</td><td>102-108</td><td>82-88</td><td>108-114</td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
+            {/* Acordeón 2: Guía de Tallas para Ropa vs Dimensiones para Hogar */}
+            {product.isHomeProduct ? (
+              <div className="border border-[#dfd8cb] rounded-lg bg-white overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setActiveAccordion(activeAccordion === "dimensiones" ? null : "dimensiones")
+                  }
+                  className="w-full px-4 py-3 text-left flex justify-between items-center text-xs font-semibold text-[#1c1917]"
+                >
+                  <span>📐 Dimensiones & Especificaciones</span>
+                  <span>{activeAccordion === "dimensiones" ? "−" : "+"}</span>
+                </button>
+                {activeAccordion === "dimensiones" && (
+                  <div className="px-4 pb-4 text-xs font-serif-body text-stone-600 space-y-2 border-t border-stone-100 pt-2 font-sans-ui">
+                    <p>
+                      Pieza diseñada exclusivamente para la colección de hogar <strong>Cloto Home (Habitar)</strong>. Creada con materiales de alta durabilidad, texturas nobles y confección artesanal para embellecer tus espacios cotidianos.
+                    </p>
+                    {availableSizes.length > 0 && (
+                      <div className="mt-2 p-2.5 bg-stone-50 rounded border border-stone-200">
+                        <span className="font-semibold text-stone-900 block mb-1">Medidas / Formatos disponibles:</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {availableSizes.map((sz) => (
+                            <span key={sz} className="px-2 py-0.5 bg-white border border-stone-300 rounded text-[11px] text-stone-700">
+                              {sz}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    <p className="text-[11px] text-stone-500 pt-1">
+                      ¿Necesitas medidas personalizadas para tu mesa, cama o espacio? Puedes consultarnos directamente por WhatsApp.
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="border border-[#dfd8cb] rounded-lg bg-white overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setActiveAccordion(activeAccordion === "guia-tallas" ? null : "guia-tallas")
+                  }
+                  className="w-full px-4 py-3 text-left flex justify-between items-center text-xs font-semibold text-[#1c1917]"
+                >
+                  <span>📏 Guía de Medidas (cm)</span>
+                  <span>{activeAccordion === "guia-tallas" ? "−" : "+"}</span>
+                </button>
+                {activeAccordion === "guia-tallas" && (
+                  <div className="px-4 pb-4 text-xs text-stone-600 space-y-2 border-t border-stone-100 pt-2 font-sans-ui">
+                    <table className="w-full text-left text-[11px]">
+                      <thead>
+                        <tr className="border-b border-stone-200 text-stone-900 font-semibold">
+                          <th className="py-1">Talla</th>
+                          <th className="py-1">Busto (cm)</th>
+                          <th className="py-1">Cintura (cm)</th>
+                          <th className="py-1">Cadera (cm)</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-stone-100">
+                        <tr><td className="py-1 font-bold">XS</td><td>82-86</td><td>62-66</td><td>88-92</td></tr>
+                        <tr><td className="py-1 font-bold">S</td><td>86-90</td><td>66-70</td><td>92-96</td></tr>
+                        <tr><td className="py-1 font-bold">M</td><td>90-96</td><td>70-76</td><td>96-102</td></tr>
+                        <tr><td className="py-1 font-bold">L</td><td>96-102</td><td>76-82</td><td>102-108</td></tr>
+                        <tr><td className="py-1 font-bold">XL</td><td>102-108</td><td>82-88</td><td>108-114</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Acordeón 3: Cuidados & Lavado */}
             <div className="border border-[#dfd8cb] rounded-lg bg-white overflow-hidden">
@@ -513,14 +558,25 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                 }
                 className="w-full px-4 py-3 text-left flex justify-between items-center text-xs font-semibold text-[#1c1917]"
               >
-                <span>🧼 Cuidados de la Prenda</span>
+                <span>🧼 {product.isHomeProduct ? "Cuidados & Mantenimiento de Hogar" : "Cuidados de la Prenda"}</span>
                 <span>{activeAccordion === "cuidados" ? "−" : "+"}</span>
               </button>
               {activeAccordion === "cuidados" && (
                 <div className="px-4 pb-4 text-xs font-serif-body text-stone-600 space-y-1.5 border-t border-stone-100 pt-2">
-                  <p>• Lavar a mano con agua fría o en ciclo delicado dentro de una bolsa de lavado.</p>
-                  <p>• Usar jabón suave sin blanqueadores abrasivos.</p>
-                  <p>• Secar a la sombra sobre superficie plana para preservar la suavidad de las fibras.</p>
+                  {product.isHomeProduct ? (
+                    <>
+                      <p>• Lavar a mano o en ciclo suave de lavadora con agua fría.</p>
+                      <p>• Usar jabón neutro libre de cloro o agentes blanqueadores abrasivos.</p>
+                      <p>• Secar a la sombra para preservar la viveza de las fibras y colores.</p>
+                      <p>• Planchado a temperatura moderada si el textil lo requiere.</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>• Lavar a mano con agua fría o en ciclo delicado dentro de una bolsa de lavado.</p>
+                      <p>• Usar jabón suave sin blanqueadores abrasivos.</p>
+                      <p>• Secar a la sombra sobre superficie plana para preservar la suavidad de las fibras.</p>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -539,11 +595,15 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
               </button>
               {activeAccordion === "empaque" && (
                 <div className="px-4 pb-4 text-xs font-serif-body text-stone-600 space-y-2 border-t border-stone-100 pt-2">
-                  <div className="bg-[#f2f1e7] p-2.5 rounded border border-[#dfd8cb] text-[11px] text-[#5c6643] font-sans-ui font-medium">
-                    ✨ <strong>Obsequio de Marca:</strong> Nuestras pijamas y prendas de descanso se entregan siempre acompañadas de una balaca y/o scrunchie a juego para complementar tu ritual.
-                  </div>
+                  {!product.isHomeProduct && (
+                    <div className="bg-[#f2f1e7] p-2.5 rounded border border-[#dfd8cb] text-[11px] text-[#5c6643] font-sans-ui font-medium">
+                      ✨ <strong>Obsequio de Marca:</strong> Nuestras pijamas y prendas de descanso se entregan siempre acompañadas de una balaca y/o scrunchie a juego para complementar tu ritual.
+                    </div>
+                  )}
                   <p>
-                    Cada pedido incluye nuestro empaque de lujo con tarjeta personalizada y aroma característico de la marca, ideal para consentirte o regalar.
+                    {product.isHomeProduct
+                      ? "Cada pieza de Cloto Home se empaca con protección especial, tarjeta personalizada y nuestro aroma característico, lista para ambientar tus espacios o para regalar."
+                      : "Cada pedido incluye nuestro empaque de lujo con tarjeta personalizada y aroma característico de la marca, ideal para consentirte o regalar."}
                   </p>
                   <p className="font-sans-ui text-[11px] text-stone-500">
                     Despachos a toda Colombia (2 a 4 días hábiles en ciudades principales).

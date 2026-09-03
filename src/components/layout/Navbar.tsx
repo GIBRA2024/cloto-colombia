@@ -4,12 +4,35 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 
+type NavChild = {
+  id: string;
+  name: string;
+  slug: string;
+  orderIndex: number;
+};
+
+type NavParent = {
+  id: string;
+  name: string;
+  slug: string;
+  orderIndex: number;
+  children: NavChild[];
+};
+
+const LINE_NAMES: Record<string, string> = {
+  "cloto-pijamas": "Ritual (Pijamas)",
+  "cloto-ika-swimsuit": "Cloto Active",
+  "cloto-rebecca": "Rebecca Casual",
+  "cloto-home": "Cloto Home",
+};
+
 export function Navbar() {
   const { itemCount, openCart } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState<NavParent[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,12 +42,84 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Cargar categorías dinámicamente desde la base de datos
+  useEffect(() => {
+    fetch("/api/nav-categories")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: NavParent[]) => {
+        if (Array.isArray(data) && data.length > 0) {
+          // Filtrar categorías que sean líneas principales (excluir categorías de prueba si no tienen hijos)
+          const validLines = data.filter((cat) => cat.slug.startsWith("cloto") || cat.children.length > 0);
+          setCategories(validLines);
+        }
+      })
+      .catch((err) => console.error("Error al cargar categorías en Navbar:", err));
+  }, []);
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       window.location.href = `/catalogo?q=${encodeURIComponent(searchQuery.trim())}`;
     }
   };
+
+  // Fallback estático en caso de carga inicial
+  const defaultLines: NavParent[] = [
+    {
+      id: "1",
+      name: "Cloto Ritual",
+      slug: "cloto-pijamas",
+      orderIndex: 1,
+      children: [
+        { id: "1-1", name: "Pijamas Clásicas (Camiseras)", slug: "pijamas-clasicas", orderIndex: 1 },
+        { id: "1-2", name: "Pijamas Básicas (Tiras)", slug: "pijamas-basicas", orderIndex: 2 },
+        { id: "1-3", name: "Pijamas Casuales (Algodón)", slug: "pijamas-casuales", orderIndex: 3 },
+        { id: "1-4", name: "Batolas, Levantadoras & Kimonos", slug: "batolas", orderIndex: 4 },
+        { id: "1-5", name: "Pantuflas, Esencias & Rituales", slug: "pantuflas", orderIndex: 5 },
+      ],
+    },
+    {
+      id: "2",
+      name: "Cloto Active",
+      slug: "cloto-ika-swimsuit",
+      orderIndex: 2,
+      children: [
+        { id: "2-1", name: "Bañadores de 1 Pieza (Enterizos)", slug: "banadores-una-pieza", orderIndex: 1 },
+        { id: "2-2", name: "Bañadores de 2 Piezas (Bikinis)", slug: "banadores-dos-piezas", orderIndex: 2 },
+        { id: "2-3", name: "Ruanas & Salidas de Baño", slug: "ruanas-salidas-bano", orderIndex: 3 },
+        { id: "2-4", name: "Pareos & Faldas Playeras", slug: "faldas-pareos", orderIndex: 4 },
+        { id: "2-5", name: "Vestidos de Playa & Shorts", slug: "vestidos-playa", orderIndex: 5 },
+      ],
+    },
+    {
+      id: "3",
+      name: "Cloto - Rebecca Casual",
+      slug: "cloto-rebecca",
+      orderIndex: 3,
+      children: [
+        { id: "3-1", name: "Vestidos Atemporales", slug: "vestidos", orderIndex: 1 },
+        { id: "3-2", name: "Conjuntos de Pantalón & Falda", slug: "conjuntos-pantalon", orderIndex: 2 },
+        { id: "3-3", name: "Camisas, Blusas & Bodys", slug: "camisas", orderIndex: 3 },
+        { id: "3-4", name: "Pantalones, Faldas & Shorts", slug: "pantalones-casuales", orderIndex: 4 },
+        { id: "3-5", name: "Joyería, Bolsos & Accesorios", slug: "joyeria-accesorios", orderIndex: 5 },
+      ],
+    },
+    {
+      id: "4",
+      name: "Cloto Home (Habitar)",
+      slug: "cloto-home",
+      orderIndex: 4,
+      children: [
+        { id: "4-1", name: "Manteles & Caminos de Mesa", slug: "manteles", orderIndex: 1 },
+        { id: "4-2", name: "Individuales, Servilletas & Portavasos", slug: "individuales", orderIndex: 2 },
+        { id: "4-3", name: "Duvets, Sábanas & Lencería de Cama", slug: "sabanas", orderIndex: 3 },
+        { id: "4-4", name: "Vajillas & Cristalería de Mesa", slug: "vajillas", orderIndex: 4 },
+        { id: "4-5", name: "Cojines, Hamacas & Decoración", slug: "cojines", orderIndex: 5 },
+      ],
+    },
+  ];
+
+  const activeLines = categories.length > 0 ? categories : defaultLines;
 
   return (
     <>
@@ -65,72 +160,56 @@ export function Navbar() {
               </button>
             </div>
 
-            {/* Navegación Desktop */}
+            {/* Navegación Desktop Dinámica */}
             <nav className="hidden lg:flex items-center gap-7 text-xs uppercase tracking-wider font-medium text-[#1c1917]">
-              {/* Cloto Ritual con Dropdown */}
-              <div className="relative group py-2">
-                <Link
-                  href="/catalogo?linea=cloto-pijamas"
-                  className="hover:text-[#b6a450] transition-colors flex items-center gap-1"
-                >
-                  Ritual (Pijamas)
-                  <svg className="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </Link>
-                <div className="absolute top-full left-0 w-64 bg-white border border-[#dfd8cb] shadow-xl rounded-md p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                  <div className="text-[10px] text-[#8d9773] font-semibold tracking-widest uppercase mb-2">
-                    Línea 1: Cloto Ritual
+              {activeLines.map((line) => {
+                const displayName = LINE_NAMES[line.slug] || line.name;
+                const hasChildren = line.children && line.children.length > 0;
+
+                return (
+                  <div key={line.id} className="relative group py-2">
+                    <Link
+                      href={`/catalogo?linea=${line.slug}`}
+                      className="hover:text-[#b6a450] transition-colors flex items-center gap-1"
+                    >
+                      {displayName}
+                      {hasChildren && (
+                        <svg className="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      )}
+                    </Link>
+
+                    {hasChildren && (
+                      <div className="absolute top-full left-0 w-64 bg-white border border-[#dfd8cb] shadow-xl rounded-md p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        <div className="text-[10px] text-[#8d9773] font-semibold tracking-widest uppercase mb-2">
+                          {line.name}
+                        </div>
+                        <ul className="space-y-2 text-xs normal-case font-normal text-stone-700 max-h-72 overflow-y-auto pr-1">
+                          {line.children.map((sub) => (
+                            <li key={sub.id}>
+                              <Link
+                                href={`/catalogo?linea=${line.slug}&categoria=${sub.slug}`}
+                                className="hover:text-[#b6a450] block transition-colors"
+                              >
+                                {sub.name}
+                              </Link>
+                            </li>
+                          ))}
+                          <li className="pt-2 border-t border-stone-100">
+                            <Link
+                              href={`/catalogo?linea=${line.slug}`}
+                              className="text-[#b6a450] font-medium text-[11px] block hover:underline"
+                            >
+                              Ver todo {displayName} &rarr;
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                  <ul className="space-y-2 text-xs normal-case font-normal text-stone-700">
-                    <li>
-                      <Link href="/catalogo?linea=cloto-pijamas&estilo=pijamas-clasicas" className="hover:text-[#b6a450] block">
-                        Pijamas Clásicas (Camiseras)
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/catalogo?linea=cloto-pijamas&estilo=pijamas-basicas" className="hover:text-[#b6a450] block">
-                        Pijamas Básicas (Tiras)
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/catalogo?linea=cloto-pijamas&estilo=pijamas-casuales" className="hover:text-[#b6a450] block">
-                        Pijamas Casuales (Algodón)
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/catalogo?linea=cloto-pijamas&categoria=batolas" className="hover:text-[#b6a450] block">
-                        Batolas, Levantadoras & Kimonos
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/catalogo?linea=cloto-pijamas&categoria=pantuflas" className="hover:text-[#b6a450] block">
-                        Pantuflas, Esencias & Rituales
-                      </Link>
-                    </li>
-                    <li className="pt-2 border-t border-stone-100">
-                      <Link href="/catalogo?linea=cloto-pijamas" className="text-[#b6a450] font-medium text-[11px] block">
-                        Ver todo Cloto Ritual &rarr;
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Cloto Active */}
-              <Link href="/catalogo?linea=cloto-ika-swimsuit" className="hover:text-[#b6a450] transition-colors py-2">
-                Cloto Active
-              </Link>
-
-              {/* Rebecca Casual */}
-              <Link href="/catalogo?linea=cloto-rebecca" className="hover:text-[#b6a450] transition-colors py-2">
-                Rebecca Casual
-              </Link>
-
-              {/* Cloto Home */}
-              <Link href="/catalogo?linea=cloto-home" className="hover:text-[#b6a450] transition-colors py-2">
-                Cloto Home
-              </Link>
+                );
+              })}
 
               {/* Sobre Nosotros */}
               <Link href="/nosotros" className="hover:text-[#b6a450] transition-colors py-2">
@@ -242,36 +321,46 @@ export function Navbar() {
         {/* Menú Móvil Desplegable */}
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-[#dfd8cb] bg-[#f2f1e7] px-6 py-6 space-y-4 shadow-lg font-sans-ui">
-            <div className="space-y-3 text-sm">
+            <div className="space-y-4 text-sm">
               <p className="text-xs uppercase tracking-widest text-[#8d9773] font-bold">Líneas Cloto</p>
-              <Link
-                href="/catalogo?linea=cloto-pijamas"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block font-serif-title text-base text-[#1c1917]"
-              >
-                1. Cloto Ritual (Pijamas & Descanso)
-              </Link>
-              <Link
-                href="/catalogo?linea=cloto-ika-swimsuit"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block font-serif-title text-base text-[#1c1917]"
-              >
-                2. Cloto Active (Bañadores & Ropa Deportiva)
-              </Link>
-              <Link
-                href="/catalogo?linea=cloto-rebecca"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block font-serif-title text-base text-[#1c1917]"
-              >
-                3. Cloto - Rebecca Casual
-              </Link>
-              <Link
-                href="/catalogo?linea=cloto-home"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block font-serif-title text-base text-[#1c1917]"
-              >
-                4. Cloto Home
-              </Link>
+              
+              {activeLines.map((line, idx) => {
+                const displayName = LINE_NAMES[line.slug] || line.name;
+                const hasChildren = line.children && line.children.length > 0;
+
+                return (
+                  <div key={line.id} className="space-y-1">
+                    <Link
+                      href={`/catalogo?linea=${line.slug}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block font-serif-title text-base text-[#1c1917] hover:text-[#b6a450]"
+                    >
+                      {idx + 1}. {displayName}
+                    </Link>
+                    {hasChildren && (
+                      <div className="flex flex-wrap gap-1.5 pl-2 text-[11px] text-stone-600">
+                        {line.children.slice(0, 4).map((sub) => (
+                          <Link
+                            key={sub.id}
+                            href={`/catalogo?linea=${line.slug}&categoria=${sub.slug}`}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="hover:text-[#b6a450]"
+                          >
+                            {sub.name} •
+                          </Link>
+                        ))}
+                        <Link
+                          href={`/catalogo?linea=${line.slug}`}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="text-[#b6a450] font-medium"
+                        >
+                          Ver todo &rarr;
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             <div className="pt-4 border-t border-[#dfd8cb] space-y-3 text-sm">

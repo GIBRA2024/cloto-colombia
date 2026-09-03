@@ -65,11 +65,42 @@ export default async function ProductPage({ params }: ProductPageProps) {
     take: 4,
   });
 
+  // Determinar si el producto pertenece a la línea de Hogar (Cloto Home)
+  const homeCategory = await prisma.category.findUnique({
+    where: { slug: "cloto-home" },
+    select: { id: true },
+  });
+
+  const homeSubcategorySlugs = [
+    "cloto-home",
+    "manteles",
+    "caminos-mesa",
+    "individuales",
+    "servilletas",
+    "portavasos",
+    "servilleteros",
+    "anunciadores",
+    "vajillas",
+    "cojines",
+    "hamacas",
+    "duvets",
+    "sabanas",
+    "hogar",
+    "decoracion-aromatica",
+  ];
+
+  const isHomeProduct = product.categories.some(
+    (c) =>
+      homeSubcategorySlugs.includes(c.category.slug) ||
+      (homeCategory && c.category.parentId === homeCategory.id)
+  );
+
   // Serializar datos para el componente cliente
   const serializedProduct = {
     id: product.id,
     name: product.name,
     slug: product.slug,
+    isHomeProduct,
     shortDescription: product.shortDescription,
     description: product.description,
     basePrice: Number(product.basePrice),
