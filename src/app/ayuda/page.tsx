@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export const metadata = {
   title: "Servicio al Cliente & Ayuda | Cloto Colombia",
@@ -234,7 +235,7 @@ export default function HelpPage() {
             <p className="text-xs text-stone-300">Nuestras asesoras de moda están disponibles para ayudarte de inmediato.</p>
           </div>
           <a
-            href="https://wa.me/573100000000?text=Hola%20Cloto%2C%20tengo%20una%20pregunta%20sobre%20mi%20compra"
+            href={getWhatsAppLink("Hola Cloto, tengo una pregunta sobre mi compra")}
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 bg-[#b6a450] hover:bg-[#a39243] text-stone-950 font-bold rounded-xl text-xs uppercase tracking-wider transition-colors shrink-0"

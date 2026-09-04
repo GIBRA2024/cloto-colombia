@@ -2,6 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { ProductDetailClient } from "./ProductDetailClient";
+import { getProductReviewsAction } from "@/actions/reviews";
 import type { Metadata } from "next";
 
 export const revalidate = 3600;
@@ -134,5 +135,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     })),
   };
 
-  return <ProductDetailClient product={serializedProduct} />;
+  const reviewsData = await getProductReviewsAction(product.id);
+
+  return <ProductDetailClient product={serializedProduct} reviewsData={reviewsData} />;
 }

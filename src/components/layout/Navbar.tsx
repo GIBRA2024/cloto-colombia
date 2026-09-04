@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import { Sparkles, Tag, X, Heart } from "lucide-react";
 
 type NavChild = {
   id: string;
@@ -28,6 +30,7 @@ const LINE_NAMES: Record<string, string> = {
 
 export function Navbar() {
   const { itemCount, openCart } = useCart();
+  const { wishlistCount } = useWishlist();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -125,7 +128,10 @@ export function Navbar() {
     <>
       {/* Barra superior de anuncios */}
       <div className="bg-[#1c1917] text-[#f2f1e7] text-[11px] uppercase tracking-widest py-2 px-4 text-center font-sans-ui flex items-center justify-center gap-3">
-        <span>✨ Envíos a toda Colombia</span>
+        <span className="inline-flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-[#b6a450]" />
+          <span>Envíos a toda Colombia</span>
+        </span>
         <span className="opacity-40">•</span>
         <span>Confección 100% Ética & Telas Orgánicas</span>
         <span className="opacity-40 hidden sm:inline">•</span>
@@ -260,6 +266,21 @@ export function Navbar() {
                 </svg>
               </Link>
 
+              {/* Botón Favoritos / Wishlist */}
+              <Link
+                href="/cuenta/favoritos"
+                className="relative p-1.5 text-[#1c1917] hover:text-[#9c6361] transition-colors flex items-center"
+                aria-label="Mis Favoritos"
+                title="Mis Favoritos"
+              >
+                <Heart className="w-5 h-5 stroke-[1.5]" />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1.5 bg-[#9c6361] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-scaleIn">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
+
               {/* Botón Carrito */}
               <button
                 type="button"
@@ -302,8 +323,9 @@ export function Navbar() {
                 type="button"
                 onClick={() => setSearchOpen(false)}
                 className="p-2 text-stone-500 hover:text-stone-900"
+                aria-label="Cerrar búsqueda"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </form>
           </div>
@@ -358,9 +380,25 @@ export function Navbar() {
               <Link
                 href="/catalogo?promociones=true"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-[#9c6361] font-semibold"
+                className="flex items-center gap-2 text-[#9c6361] font-semibold"
               >
-                🏷️ Ofertas & Promociones
+                <Tag className="w-4 h-4" />
+                <span>Ofertas & Promociones</span>
+              </Link>
+              <Link
+                href="/cuenta/favoritos"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between text-[#1c1917]"
+              >
+                <span className="flex items-center gap-2">
+                  <Heart className="w-4 h-4 text-[#9c6361]" />
+                  <span>Mis Favoritos</span>
+                </span>
+                {wishlistCount > 0 && (
+                  <span className="bg-[#9c6361] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    {wishlistCount}
+                  </span>
+                )}
               </Link>
               <Link
                 href="/nosotros"

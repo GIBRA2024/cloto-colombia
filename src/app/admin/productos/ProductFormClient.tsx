@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { saveProduct } from "@/actions/inventory";
+import { AlertCircle, Globe, X, Settings } from "lucide-react";
 
 type CategoryItem = {
   id: string;
@@ -241,7 +242,7 @@ export function ProductFormClient({ initialProduct, categories }: ProductFormCli
 
       {error && (
         <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl flex items-center gap-2">
-          <span>⚠️</span>
+          <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
       )}
@@ -356,8 +357,9 @@ export function ProductFormClient({ initialProduct, categories }: ProductFormCli
               onChange={(e) => setIsPublished(e.target.checked)}
               className="w-4 h-4 text-[#8d9773] focus:ring-[#8d9773] rounded"
             />
-            <label htmlFor="isPublishedSwitch" className="font-semibold text-stone-800 cursor-pointer">
-              🌐 Publicado en Tienda
+            <label htmlFor="isPublishedSwitch" className="font-semibold text-stone-800 cursor-pointer flex items-center gap-1.5">
+              <Globe className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>Publicado en Tienda</span>
             </label>
           </div>
         </div>
@@ -411,10 +413,11 @@ export function ProductFormClient({ initialProduct, categories }: ProductFormCli
                 <button
                   type="button"
                   onClick={() => handleRemoveImage(idx)}
-                  className="text-red-300 hover:text-red-500 font-bold"
+                  className="text-red-300 hover:text-red-500 font-bold p-0.5 transition-colors"
                   title="Eliminar foto"
+                  aria-label="Eliminar foto"
                 >
-                  ✕
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
 
@@ -459,10 +462,10 @@ export function ProductFormClient({ initialProduct, categories }: ProductFormCli
             href="/admin/categorias"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] font-semibold text-[#8d9773] hover:text-[#5c6643] flex items-center gap-1 self-start sm:self-auto bg-stone-100 px-2.5 py-1 rounded-lg border border-stone-200 transition-colors"
+            className="text-[11px] font-semibold text-[#8d9773] hover:text-[#5c6643] flex items-center gap-1.5 self-start sm:self-auto bg-stone-100 px-2.5 py-1 rounded-lg border border-stone-200 transition-colors"
             title="Abre el gestor en una pestaña nueva para que no pierdas tus cambios"
           >
-            <span>⚙️</span>
+            <Settings className="w-3.5 h-3.5" />
             <span>Gestionar o crear categorías &rarr;</span>
           </Link>
         </div>

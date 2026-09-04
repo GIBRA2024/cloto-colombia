@@ -2,6 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { saveCoupon, deleteCoupon } from "@/actions/coupons";
+import { X } from "lucide-react";
 
 type CouponItem = {
   id: string;
@@ -199,9 +200,10 @@ export function CouponsManagerClient({ initialCoupons }: { initialCoupons: Coupo
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-stone-400 hover:text-stone-700"
+                className="p-1 text-stone-400 hover:text-stone-700 transition-colors"
+                aria-label="Cerrar"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
 

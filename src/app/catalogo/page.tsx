@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { X, Tag, Check, PackageOpen } from "lucide-react";
+import { WishlistButton } from "@/components/ui/WishlistButton";
 
 export const dynamic = "force-dynamic";
 
@@ -275,7 +277,8 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
               href="/catalogo"
               className="inline-flex items-center gap-1.5 text-xs text-[#9c6361] hover:underline font-semibold bg-[#9c6361]/10 px-3 py-1.5 rounded-lg transition-colors"
             >
-              <span>✕</span> Limpiar todos los filtros
+              <X className="w-3.5 h-3.5" />
+              <span>Limpiar todos los filtros</span>
             </Link>
           )}
 
@@ -310,11 +313,12 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
               <li>
                 <Link
                   href="/catalogo?promociones=true"
-                  className={`text-[#9c6361] hover:underline block transition-colors ${
+                  className={`text-[#9c6361] hover:underline flex items-center gap-1.5 transition-colors ${
                     promociones === "true" ? "font-bold" : ""
                   }`}
                 >
-                  🏷️ Solo Ofertas / Promociones
+                  <Tag className="w-3.5 h-3.5" />
+                  <span>Solo Ofertas / Promociones</span>
                 </Link>
               </li>
             </ul>
@@ -338,11 +342,12 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                     <Link
                       key={item.slug}
                       href={targetHref}
-                      className={`block py-1 transition-colors hover:text-[#b6a450] ${
+                      className={`flex items-center justify-between py-1 transition-colors hover:text-[#b6a450] ${
                         isSelected ? "font-bold text-[#b6a450]" : ""
                       }`}
                     >
-                      {item.name} {isSelected && "✓"}
+                      <span>{item.name}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5 text-[#b6a450]" />}
                     </Link>
                   );
                 })}
@@ -419,7 +424,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         <main className="lg:col-span-3 space-y-6">
           {products.length === 0 ? (
             <div className="text-center py-20 bg-white rounded-2xl border border-[#dfd8cb] p-8 space-y-4">
-              <span className="text-4xl">🕊️</span>
+              <PackageOpen className="w-12 h-12 text-stone-300 mx-auto stroke-[1.25]" />
               <h2 className="font-serif-title text-2xl text-[#1c1917]">
                 No encontramos prendas con los filtros seleccionados
               </h2>
@@ -480,6 +485,14 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                             {discountPercent ? `-${discountPercent}%` : "Oferta"}
                           </span>
                         )}
+                      </div>
+
+                      {/* Botón Favoritos flotante */}
+                      <div className="absolute top-2.5 right-2.5 z-10">
+                        <WishlistButton
+                          productId={product.id}
+                          className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white hover:scale-110"
+                        />
                       </div>
                     </Link>
 

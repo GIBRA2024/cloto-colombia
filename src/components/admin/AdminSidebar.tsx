@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logoutAction } from "@/actions/auth";
+import { X } from "lucide-react";
 
 type ProfileData = {
   id: string;
@@ -218,7 +219,7 @@ export function AdminSidebar({ profile, isOpen, onClose }: AdminSidebarProps) {
               className="md:hidden p-1.5 rounded-lg text-stone-400 hover:text-white hover:bg-stone-800 transition-colors"
               aria-label="Cerrar menú"
             >
-              ✕
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>

@@ -3,6 +3,8 @@ import Link from "next/link";
 import { getCurrentProfile } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { notFound, redirect } from "next/navigation";
+import { Truck, MessageCircle } from "lucide-react";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 
@@ -34,8 +36,7 @@ export default async function SingleOrderPage({ params }: SingleOrderPageProps) 
   }
 
   const shippingAddr = order.shippingAddress as any;
-  const whatsappNumber = "573100000000";
-  const whatsappMsg = encodeURIComponent(
+  const whatsappUrl = getWhatsAppLink(
     `¡Hola Cloto! Tengo una consulta sobre el estado de mi pedido ${order.orderNumber}.`
   );
 
@@ -71,8 +72,9 @@ export default async function SingleOrderPage({ params }: SingleOrderPageProps) 
       {/* Información Logística */}
       {order.trackingNumber && (
         <div className="bg-[#f0f3eb] p-6 rounded-2xl border border-[#b2bc98] space-y-2">
-          <h3 className="font-serif-title text-base text-[#5c6643] font-semibold">
-            🚚 Guía de Envío Asignada
+          <h3 className="font-serif-title text-base text-[#5c6643] font-semibold flex items-center gap-2">
+            <Truck className="w-5 h-5 text-[#5c6643]" />
+            <span>Guía de Envío Asignada</span>
           </h3>
           <p className="text-xs text-stone-700">
             Transportadora: <strong>{order.carrier || "Coordinadora"}</strong> • Número de Guía: <strong>{order.trackingNumber}</strong>
@@ -142,12 +144,13 @@ export default async function SingleOrderPage({ params }: SingleOrderPageProps) 
       {/* Soporte WhatsApp */}
       <div className="text-center pt-4">
         <a
-          href={`https://wa.me/${whatsappNumber}?text=${whatsappMsg}`}
+          href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-xs text-emerald-700 hover:underline font-semibold"
         >
-          <span>💬 ¿Tienes dudas sobre este pedido? Consulta con nuestra asesora por WhatsApp</span>
+          <MessageCircle className="w-4 h-4 text-[#25D366]" />
+          <span>¿Tienes dudas sobre este pedido? Consulta con nuestra asesora por WhatsApp</span>
         </a>
       </div>
     </div>

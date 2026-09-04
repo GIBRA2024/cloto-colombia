@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export function WhatsAppButton() {
   const [isHovered, setIsHovered] = useState(false);
-  const phoneNumber = "573100000000"; // Número de asesoría Cloto Colombia
-  const defaultMessage = encodeURIComponent(
-    "¡Hola Cloto! ✨ Me gustaría recibir asesoría personalizada sobre prendas, tallas y disponibilidad."
+  const whatsappUrl = getWhatsAppLink(
+    "¡Hola Cloto! Me gustaría recibir asesoría personalizada sobre prendas, tallas y disponibilidad."
   );
 
   return (
@@ -25,7 +25,7 @@ export function WhatsAppButton() {
 
       {/* Botón WhatsApp */}
       <a
-        href={`https://wa.me/${phoneNumber}?text=${defaultMessage}`}
+        href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         onMouseEnter={() => setIsHovered(true)}

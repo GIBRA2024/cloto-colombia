@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
+import { ShoppingBag, Sparkles, X } from "lucide-react";
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, updateQuantity, subtotal, itemCount } = useCart();
@@ -49,8 +50,9 @@ export function CartDrawer() {
                 Te faltan <strong>${remainingForFreeShipping.toLocaleString("es-CO")} COP</strong> para <strong>Envío Gratis</strong> en Colombia.
               </p>
             ) : (
-              <p className="text-xs text-emerald-800 font-semibold mb-1.5 flex items-center gap-1">
-                <span>🎉</span> ¡Calificas para Envío Gratis a toda Colombia!
+              <p className="text-xs text-emerald-800 font-semibold mb-1.5 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                <span>¡Calificas para Envío Gratis a toda Colombia!</span>
               </p>
             )}
             <div className="w-full bg-[#dfd8cb] h-1.5 rounded-full overflow-hidden">
@@ -65,8 +67,8 @@ export function CartDrawer() {
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
             {items.length === 0 ? (
               <div className="text-center py-16 space-y-4">
-                <div className="w-16 h-16 mx-auto rounded-full bg-[#e9e5d9] flex items-center justify-center text-2xl text-stone-500">
-                  🛍️
+                <div className="w-16 h-16 mx-auto rounded-full bg-[#e9e5d9] flex items-center justify-center text-stone-500">
+                  <ShoppingBag className="w-8 h-8 stroke-[1.5]" />
                 </div>
                 <h3 className="font-serif-title text-lg text-stone-800">
                   Tu carrito está vacío
@@ -108,10 +110,11 @@ export function CartDrawer() {
                         <button
                           type="button"
                           onClick={() => removeItem(item.id)}
-                          className="text-stone-400 hover:text-red-600 transition-colors text-xs"
+                          className="text-stone-400 hover:text-red-600 transition-colors p-0.5"
                           title="Eliminar del carrito"
+                          aria-label="Eliminar del carrito"
                         >
-                          ✕
+                          <X className="w-3.5 h-3.5" />
                         </button>
                       </div>
 

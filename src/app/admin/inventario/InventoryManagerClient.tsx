@@ -4,6 +4,7 @@ import React, { useState, useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { updateVariantStock, batchUpdateVariantStock } from "@/actions/inventory";
+import { X } from "lucide-react";
 
 type InventoryItem = {
   id: string; // variantId
@@ -299,8 +300,9 @@ export function InventoryManagerClient({ initialVariants }: { initialVariants: I
                               onClick={() => handleResetSingle(v.id)}
                               className="p-1.5 text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-md transition-colors"
                               title="Deshacer cambio"
+                              aria-label="Deshacer cambio"
                             >
-                              ✕
+                              <X className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         ) : (

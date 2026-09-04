@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export function Footer() {
   return (
@@ -48,7 +49,7 @@ export function Footer() {
               </p>
               <div className="pt-2 flex flex-wrap gap-3">
                 <a
-                  href="https://wa.me/573100000000?text=Hola%20Cloto%2C%20quisiera%20asesor%C3%ADa%20personalizada%20con%20una%20prenda%20o%20producto"
+                  href={getWhatsAppLink("Hola Cloto, quisiera asesoría personalizada con una prenda o producto")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#b6a450] hover:bg-[#a39243] text-stone-950 font-bold rounded-lg text-xs transition-colors uppercase tracking-wider"
@@ -176,7 +177,7 @@ export function Footer() {
             <ul className="space-y-2.5 text-stone-300">
               <li>
                 <a
-                  href="https://wa.me/573100000000"
+                  href={getWhatsAppLink()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
@@ -201,14 +202,39 @@ export function Footer() {
         </div>
 
         {/* Sección Inferior: Copyright & Legal */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
-          <p>© {new Date().getFullYear()} Cloto Colombia (T&T). Todos los derechos reservados.</p>
-          <div className="flex items-center gap-4 text-[11px]">
-            <span>Términos y Condiciones</span>
-            <span>•</span>
-            <span>Política de Privacidad</span>
-            <span>•</span>
-            <span>Cambios y Garantías</span>
+        <div className="pt-8 space-y-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-stone-400">
+            <div className="flex flex-wrap items-center gap-4">
+              <Link href="/ayuda" className="hover:text-stone-200 transition-colors">
+                Términos y Condiciones
+              </Link>
+              <span>•</span>
+              <Link href="/ayuda" className="hover:text-stone-200 transition-colors">
+                Política de Privacidad
+              </Link>
+              <span>•</span>
+              <Link href="/ayuda" className="hover:text-stone-200 transition-colors">
+                Cambios y Garantías
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-between items-center text-xs text-stone-400 gap-2 border-t border-stone-800/80 pt-4">
+            <p>
+              © {new Date().getFullYear()} Cloto Colombia (T&T). Contenido y marca protegidos.
+            </p>
+            <p>
+              Software y plataforma tecnológica © {new Date().getFullYear()}{" "}
+              <a
+                href="https://gibracompany.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-stone-300 hover:text-white hover:underline transition-colors"
+              >
+                Gibra Company
+              </a>
+              . Todos los derechos reservados.
+            </p>
           </div>
         </div>
       </div>

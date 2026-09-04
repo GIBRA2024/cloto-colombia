@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { Check, MessageCircle } from "lucide-react";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 
@@ -33,8 +35,7 @@ export default async function OrderSuccessPage({ searchParams }: SuccessPageProp
   }
 
   const shippingAddr = order.shippingAddress as any;
-  const whatsappNumber = "573100000000";
-  const whatsappMsg = encodeURIComponent(
+  const whatsappUrl = getWhatsAppLink(
     `¡Hola Cloto! Acabo de realizar el pedido ${order.orderNumber}. Me gustaría confirmar los detalles del despacho.`
   );
 
@@ -42,8 +43,8 @@ export default async function OrderSuccessPage({ searchParams }: SuccessPageProp
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 font-sans-ui space-y-8">
       {/* Banner de Éxito */}
       <div className="text-center space-y-4 bg-white p-8 sm:p-10 rounded-2xl border border-[#dfd8cb] shadow-lg">
-        <div className="w-16 h-16 mx-auto rounded-full bg-[#f0f3eb] flex items-center justify-center text-2xl text-[#5c6643]">
-          ✓
+        <div className="w-16 h-16 mx-auto rounded-full bg-[#f0f3eb] flex items-center justify-center text-[#5c6643]">
+          <Check className="w-8 h-8 stroke-[2.5]" />
         </div>
         <span className="text-[10px] uppercase tracking-[0.3em] text-[#8d9773] font-bold block">
           ¡Gracias por tu compra!
@@ -57,12 +58,13 @@ export default async function OrderSuccessPage({ searchParams }: SuccessPageProp
 
         <div className="pt-2">
           <a
-            href={`https://wa.me/${whatsappNumber}?text=${whatsappMsg}`}
+            href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-semibold px-6 py-3 rounded-full transition-colors shadow-md"
           >
-            <span>💬 Notificar por WhatsApp</span>
+            <MessageCircle className="w-4 h-4" />
+            <span>Notificar por WhatsApp</span>
           </a>
         </div>
       </div>

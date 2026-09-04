@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { updateProfileAction, logoutAction } from "@/actions/auth";
+import { ShieldCheck, Check, X, LogOut } from "lucide-react";
 
 interface AdminProfileClientProps {
   profile: {
@@ -82,8 +83,15 @@ export function AdminProfileClient({ profile }: AdminProfileClientProps) {
             <h2 className="font-serif-title text-2xl text-white">
               {fullName}
             </h2>
-            <span className="px-2.5 py-0.5 rounded-md bg-[#b6a450]/20 text-[#b6a450] border border-[#b6a450]/40 text-[10px] font-bold uppercase tracking-wider">
-              {profile.role === "ADMIN" ? "🛡️ Rol Administrador" : "Staff"}
+            <span className="px-2.5 py-1 rounded-md bg-[#b6a450]/20 text-[#b6a450] border border-[#b6a450]/40 text-[10px] font-bold uppercase tracking-wider inline-flex items-center gap-1.5">
+              {profile.role === "ADMIN" ? (
+                <>
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Rol Administrador</span>
+                </>
+              ) : (
+                "Staff"
+              )}
             </span>
           </div>
           <p className="text-stone-400 text-xs">
@@ -105,14 +113,14 @@ export function AdminProfileClient({ profile }: AdminProfileClientProps) {
       {/* Notificación de Estado */}
       {message && (
         <div
-          className={`p-4 rounded-xl text-xs font-medium ${
+          className={`p-4 rounded-xl text-xs font-medium flex items-center gap-2 ${
             message.type === "success"
               ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
               : "bg-rose-50 text-rose-800 border border-rose-200"
           }`}
         >
-          {message.type === "success" ? "✓ " : "✕ "}
-          {message.text}
+          {message.type === "success" ? <Check className="w-4 h-4 shrink-0 text-emerald-600" /> : <X className="w-4 h-4 shrink-0 text-rose-600" />}
+          <span>{message.text}</span>
         </div>
       )}
 
@@ -206,19 +214,19 @@ export function AdminProfileClient({ profile }: AdminProfileClientProps) {
             </h3>
             <ul className="space-y-2.5 text-xs text-stone-600">
               <li className="flex items-center gap-2">
-                <span className="text-emerald-600">✓</span> Crear y editar productos
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Crear y editar productos
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-600">✓</span> Ajustar inventario y stock
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Ajustar inventario y stock
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-600">✓</span> Gestionar pedidos y guías
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Gestionar pedidos y guías
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-600">✓</span> Crear cupones de descuento
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Crear cupones de descuento
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-600">✓</span> Ver reportes financieros
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Ver reportes financieros
               </li>
             </ul>
           </div>
@@ -235,7 +243,7 @@ export function AdminProfileClient({ profile }: AdminProfileClientProps) {
                 type="submit"
                 className="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs py-3 px-4 rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2"
               >
-                <span>🚪</span>
+                <LogOut className="w-4 h-4" />
                 <span>Cerrar Sesión Ahora</span>
               </button>
             </form>

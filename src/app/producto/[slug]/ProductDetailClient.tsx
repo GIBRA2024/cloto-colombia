@@ -5,6 +5,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
+import { getWhatsAppLink } from "@/lib/whatsapp";
+import { WishlistButton } from "@/components/ui/WishlistButton";
+import {
+  Leaf,
+  Search,
+  Ruler,
+  XCircle,
+  AlertTriangle,
+  CheckCircle,
+  Check,
+  Layers,
+  Sparkles,
+  Gift,
+  X,
+  ChevronDown,
+  Star,
+} from "lucide-react";
+import { ProductReviewsSection } from "@/components/product/ProductReviewsSection";
+import type { ProductReviewsData } from "@/actions/reviews";
 
 type ProductImage = {
   id: string;
@@ -48,7 +67,13 @@ type ProductData = {
   }[];
 };
 
-export function ProductDetailClient({ product }: { product: ProductData }) {
+export function ProductDetailClient({
+  product,
+  reviewsData,
+}: {
+  product: ProductData;
+  reviewsData?: ProductReviewsData;
+}) {
   const router = useRouter();
   const { addItem, openCart } = useCart();
 
@@ -189,9 +214,8 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
   };
 
   // Enlace WhatsApp con mensaje personalizado
-  const whatsappNumber = "573100000000";
-  const whatsappText = encodeURIComponent(
-    `¡Hola Cloto! ✨ Me interesa ${product.isHomeProduct ? "el producto de hogar" : "la prenda"} "${product.name}"${
+  const whatsappUrl = getWhatsAppLink(
+    `¡Hola Cloto! Me interesa ${product.isHomeProduct ? "el producto de hogar" : "la prenda"} "${product.name}"${
       selectedVariant?.color ? ` en color ${selectedVariant.color}` : ""
     }${selectedVariant?.size ? ` (${product.isHomeProduct ? "medida" : "talla"} ${selectedVariant.size})` : ""}. ¿Podrían asesorarme con la disponibilidad y detalles?`
   );
@@ -248,8 +272,9 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
 
             {/* Badges Flotantes */}
             <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
-              <span className="badge-olive text-[9px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded shadow-sm">
-                🌿 Fibras Orgánicas & Eco
+              <span className="badge-olive text-[9px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded shadow-sm inline-flex items-center gap-1">
+                <Leaf className="w-3 h-3 text-[#5c6643]" />
+                <span>Fibras Orgánicas & Eco</span>
               </span>
               {hasDiscount && (
                 <span className="badge-terracotta text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded shadow-sm">
@@ -258,9 +283,18 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
               )}
             </div>
 
+            {/* Botón Favoritos Flotante */}
+            <div className="absolute top-3 right-3 z-10">
+              <WishlistButton
+                productId={product.id}
+                className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm shadow-md hover:bg-white hover:scale-110"
+                iconClassName="w-5 h-5"
+              />
+            </div>
+
             {/* Botón flotante 'Ampliar' */}
             <div className="absolute bottom-3 right-3 bg-black/65 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-[10px] font-medium flex items-center gap-1.5 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
-              <span>🔍</span>
+              <Search className="w-3 h-3" />
               <span>Ampliar</span>
             </div>
           </div>
@@ -280,6 +314,32 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
             <p className="font-serif-body text-xs text-stone-600">
               {product.shortDescription || "Prenda atemporal confeccionada con telas orgánicas colombianas."}
             </p>
+
+            {/* Calificación y Enlace a Reseñas */}
+            <div className="flex items-center gap-2 pt-0.5">
+              <div className="flex items-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((s) => (
+                  <Star
+                    key={s}
+                    className={`w-3.5 h-3.5 ${
+                      s <= Math.round(reviewsData?.averageRating ?? 5)
+                        ? "fill-[#b6a450] text-[#b6a450]"
+                        : "text-stone-300"
+                    }`}
+                  />
+                ))}
+              </div>
+              <a
+                href="#resenas"
+                className="text-xs text-stone-500 hover:text-[#b6a450] font-medium transition-colors"
+              >
+                {reviewsData?.totalReviews && reviewsData.totalReviews > 0
+                  ? `${reviewsData.averageRating.toFixed(1)} (${reviewsData.totalReviews} ${
+                      reviewsData.totalReviews === 1 ? "opinión" : "opiniones"
+                    })`
+                  : "Sé la primera en opinar"}
+              </a>
+            </div>
 
             {/* Precios */}
             <div className="flex items-baseline gap-3 pt-2">
@@ -334,9 +394,10 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                   <button
                     type="button"
                     onClick={() => setActiveAccordion("guia-tallas")}
-                    className="text-[11px] text-[#b6a450] hover:underline font-medium"
+                    className="text-[11px] text-[#b6a450] hover:underline font-medium inline-flex items-center gap-1"
                   >
-                    📏 Guía de tallas
+                    <Ruler className="w-3.5 h-3.5" />
+                    <span>Guía de tallas</span>
                   </button>
                 )}
               </div>
@@ -366,15 +427,18 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
           <div className="text-xs">
             {isOutOfStock ? (
               <p className="text-[#834442] font-semibold flex items-center gap-1.5">
-                <span>✕</span> {product.isHomeProduct ? "Producto agotado en esta opción" : "Prenda agotada en esta talla/color"}
+                <XCircle className="w-4 h-4 shrink-0 text-[#834442]" />
+                <span>{product.isHomeProduct ? "Producto agotado en esta opción" : "Prenda agotada en esta talla/color"}</span>
               </p>
             ) : isLowStock ? (
               <p className="text-[#8c7b30] font-semibold flex items-center gap-1.5 animate-pulse">
-                <span>⚠️</span> ¡Solo quedan {selectedVariant?.stock} unidades disponibles!
+                <AlertTriangle className="w-4 h-4 shrink-0 text-[#8c7b30]" />
+                <span>¡Solo quedan {selectedVariant?.stock} unidades disponibles!</span>
               </p>
             ) : (
               <p className="text-[#5c6643] font-medium flex items-center gap-1.5">
-                <span>✓</span> Disponible para despacho inmediato en Colombia
+                <CheckCircle className="w-4 h-4 shrink-0 text-[#5c6643]" />
+                <span>Disponible para despacho inmediato en Colombia</span>
               </p>
             )}
           </div>
@@ -425,6 +489,16 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
             >
               Comprar Ahora &rarr;
             </button>
+
+            {/* Botón Guardar en Favoritos */}
+            <WishlistButton
+              productId={product.id}
+              showText={true}
+              activeLabel="En tus Favoritos (Toca para quitar)"
+              inactiveLabel="Guardar en mi Lista de Deseos"
+              className="w-full py-3 px-4 rounded-lg border border-[#dfd8cb] bg-white hover:bg-stone-50 text-stone-700 shadow-sm text-xs font-semibold"
+              iconClassName="w-4 h-4"
+            />
           </div>
 
           {/* BOTÓN ASESORÍA PERSONALIZADA WHATSAPP */}
@@ -441,7 +515,7 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                 : "Habla directamente con nuestra asesora de imagen por WhatsApp para una atención personalizada."}
             </p>
             <a
-              href={`https://wa.me/${whatsappNumber}?text=${whatsappText}`}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-lg bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366] hover:text-white text-xs font-semibold transition-colors border border-[#25D366]/30"
@@ -461,8 +535,15 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                 }
                 className="w-full px-4 py-3 text-left flex justify-between items-center text-xs font-semibold text-[#1c1917]"
               >
-                <span>🌱 {product.isHomeProduct ? "Materiales & Confección de Hogar" : "Composición & Fibras Orgánicas"}</span>
-                <span>{activeAccordion === "composicion" ? "−" : "+"}</span>
+                <span className="flex items-center gap-2">
+                  <Leaf className="w-4 h-4 text-[#8d9773]" />
+                  <span>{product.isHomeProduct ? "Materiales & Confección de Hogar" : "Composición & Fibras Orgánicas"}</span>
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 text-stone-500 transition-transform duration-200 ${
+                    activeAccordion === "composicion" ? "rotate-180" : ""
+                  }`}
+                />
               </button>
               {activeAccordion === "composicion" && (
                 <div className="px-4 pb-4 text-xs font-serif-body text-stone-600 space-y-2 border-t border-stone-100 pt-2">
@@ -470,8 +551,8 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                     {product.description}
                   </p>
                   <div className="text-[11px] text-[#8d9773] font-sans-ui font-medium space-y-1 pt-1 border-t border-stone-100">
-                    <p>✓ Confeccionado con materiales seleccionados de alta nobleza y durabilidad.</p>
-                    <p>✓ 100% Hecho en talleres éticos de Colombia con conciencia ambiental.</p>
+                    <p className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-[#8d9773] shrink-0" /> Confeccionado con materiales seleccionados de alta nobleza y durabilidad.</p>
+                    <p className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-[#8d9773] shrink-0" /> 100% Hecho en talleres éticos de Colombia con conciencia ambiental.</p>
                   </div>
                 </div>
               )}
@@ -487,8 +568,15 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                   }
                   className="w-full px-4 py-3 text-left flex justify-between items-center text-xs font-semibold text-[#1c1917]"
                 >
-                  <span>📐 Dimensiones & Especificaciones</span>
-                  <span>{activeAccordion === "dimensiones" ? "−" : "+"}</span>
+                  <span className="flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-[#8d9773]" />
+                    <span>Dimensiones & Especificaciones</span>
+                  </span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-stone-500 transition-transform duration-200 ${
+                      activeAccordion === "dimensiones" ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
                 {activeAccordion === "dimensiones" && (
                   <div className="px-4 pb-4 text-xs font-serif-body text-stone-600 space-y-2 border-t border-stone-100 pt-2 font-sans-ui">
@@ -522,8 +610,15 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                   }
                   className="w-full px-4 py-3 text-left flex justify-between items-center text-xs font-semibold text-[#1c1917]"
                 >
-                  <span>📏 Guía de Medidas (cm)</span>
-                  <span>{activeAccordion === "guia-tallas" ? "−" : "+"}</span>
+                  <span className="flex items-center gap-2">
+                    <Ruler className="w-4 h-4 text-[#8d9773]" />
+                    <span>Guía de Medidas (cm)</span>
+                  </span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-stone-500 transition-transform duration-200 ${
+                      activeAccordion === "guia-tallas" ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
                 {activeAccordion === "guia-tallas" && (
                   <div className="px-4 pb-4 text-xs text-stone-600 space-y-2 border-t border-stone-100 pt-2 font-sans-ui">
@@ -558,8 +653,15 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                 }
                 className="w-full px-4 py-3 text-left flex justify-between items-center text-xs font-semibold text-[#1c1917]"
               >
-                <span>🧼 {product.isHomeProduct ? "Cuidados & Mantenimiento de Hogar" : "Cuidados de la Prenda"}</span>
-                <span>{activeAccordion === "cuidados" ? "−" : "+"}</span>
+                <span className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#8d9773]" />
+                  <span>{product.isHomeProduct ? "Cuidados & Mantenimiento de Hogar" : "Cuidados de la Prenda"}</span>
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 text-stone-500 transition-transform duration-200 ${
+                    activeAccordion === "cuidados" ? "rotate-180" : ""
+                  }`}
+                />
               </button>
               {activeAccordion === "cuidados" && (
                 <div className="px-4 pb-4 text-xs font-serif-body text-stone-600 space-y-1.5 border-t border-stone-100 pt-2">
@@ -590,14 +692,22 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                 }
                 className="w-full px-4 py-3 text-left flex justify-between items-center text-xs font-semibold text-[#1c1917]"
               >
-                <span>🎁 Experiencia de Empaque & Envíos</span>
-                <span>{activeAccordion === "empaque" ? "−" : "+"}</span>
+                <span className="flex items-center gap-2">
+                  <Gift className="w-4 h-4 text-[#8d9773]" />
+                  <span>Experiencia de Empaque & Envíos</span>
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 text-stone-500 transition-transform duration-200 ${
+                    activeAccordion === "empaque" ? "rotate-180" : ""
+                  }`}
+                />
               </button>
               {activeAccordion === "empaque" && (
                 <div className="px-4 pb-4 text-xs font-serif-body text-stone-600 space-y-2 border-t border-stone-100 pt-2">
                   {!product.isHomeProduct && (
-                    <div className="bg-[#f2f1e7] p-2.5 rounded border border-[#dfd8cb] text-[11px] text-[#5c6643] font-sans-ui font-medium">
-                      ✨ <strong>Obsequio de Marca:</strong> Nuestras pijamas y prendas de descanso se entregan siempre acompañadas de una balaca y/o scrunchie a juego para complementar tu ritual.
+                    <div className="bg-[#f2f1e7] p-2.5 rounded border border-[#dfd8cb] text-[11px] text-[#5c6643] font-sans-ui font-medium flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-[#b6a450] shrink-0" />
+                      <span><strong>Obsequio de Marca:</strong> Nuestras pijamas y prendas de descanso se entregan siempre acompañadas de una balaca y/o scrunchie a juego para complementar tu ritual.</span>
                     </div>
                   )}
                   <p>
@@ -642,6 +752,12 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
+                    <div className="absolute top-2 right-2 z-10">
+                      <WishlistButton
+                        productId={rel.id}
+                        className="w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white hover:scale-110"
+                      />
+                    </div>
                   </Link>
                   <div>
                     <h4 className="font-serif-title text-sm text-[#1c1917] group-hover:text-[#b6a450] transition-colors line-clamp-1">
@@ -657,6 +773,20 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
           </div>
         </div>
       )}
+
+      {/* 3. SECCIÓN DE RESEÑAS Y OPINIONES */}
+      <ProductReviewsSection
+        productId={product.id}
+        productName={product.name}
+        initialData={
+          reviewsData || {
+            reviews: [],
+            averageRating: 5,
+            totalReviews: 0,
+            distribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
+          }
+        }
+      />
 
       {/* MODAL LIGHTBOX / CARRUSEL EN PANTALLA COMPLETA */}
       {isLightboxOpen && (
@@ -676,10 +806,11 @@ export function ProductDetailClient({ product }: { product: ProductData }) {
             <button
               type="button"
               onClick={closeLightbox}
-              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg transition-colors"
+              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
               title="Cerrar (Esc)"
+              aria-label="Cerrar"
             >
-              ✕
+              <X className="w-5 h-5" />
             </button>
           </div>
 

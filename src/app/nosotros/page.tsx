@@ -1,6 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Leaf, Sparkles, Clock, Feather } from "lucide-react";
+import { ColombiaFlag } from "@/components/ui/BrandIcons";
 
 export const metadata = {
   title: "Sobre Nosotros | Cloto Colombia - Moda Femenina Consciente",
@@ -59,13 +61,17 @@ export default function AboutPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[#dfd8cb]">
-              <div className="space-y-1">
-                <span className="text-xl">🇨🇴</span>
+              <div className="space-y-1.5">
+                <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center">
+                  <ColombiaFlag className="w-4 h-4" />
+                </div>
                 <h4 className="font-serif-title text-sm text-[#1c1917]">100% Hecho en Colombia</h4>
                 <p className="text-[11px] text-stone-500">Talleres éticos con manos artesanas locales</p>
               </div>
-              <div className="space-y-1">
-                <span className="text-xl">🌿</span>
+              <div className="space-y-1.5">
+                <div className="w-8 h-8 rounded-full bg-[#8d9773]/10 text-[#5c6643] flex items-center justify-center">
+                  <Leaf className="w-4 h-4 stroke-[1.75]" />
+                </div>
                 <h4 className="font-serif-title text-sm text-[#1c1917]">Fibras Nobles & Eco</h4>
                 <p className="text-[11px] text-stone-500">Algodón orgánico, seda y textiles ecológicos</p>
               </div>
@@ -126,26 +132,34 @@ export default function AboutPage() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="p-6 bg-white rounded-xl border border-[#dfd8cb] text-center space-y-2">
-            <span className="text-2xl">✨</span>
+          <div className="p-6 bg-white rounded-xl border border-[#dfd8cb] text-center space-y-3 group hover:border-[#b6a450] transition-colors">
+            <div className="w-10 h-10 mx-auto rounded-full bg-[#b6a450]/15 text-[#8c7b30] flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Sparkles className="w-5 h-5 stroke-[1.75]" />
+            </div>
             <h4 className="font-serif-title text-base text-[#1c1917]">Autenticidad</h4>
             <p className="text-xs text-stone-500 font-serif-body">Honrar lo genuino sin seguir modas pasajeras.</p>
           </div>
 
-          <div className="p-6 bg-white rounded-xl border border-[#dfd8cb] text-center space-y-2">
-            <span className="text-2xl">🌱</span>
+          <div className="p-6 bg-white rounded-xl border border-[#dfd8cb] text-center space-y-3 group hover:border-[#8d9773] transition-colors">
+            <div className="w-10 h-10 mx-auto rounded-full bg-[#8d9773]/10 text-[#5c6643] flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Leaf className="w-5 h-5 stroke-[1.75]" />
+            </div>
             <h4 className="font-serif-title text-base text-[#1c1917]">Sostenibilidad</h4>
             <p className="text-xs text-stone-500 font-serif-body">Procesos responsables con el planeta y su gente.</p>
           </div>
 
-          <div className="p-6 bg-white rounded-xl border border-[#dfd8cb] text-center space-y-2">
-            <span className="text-2xl">⏳</span>
+          <div className="p-6 bg-white rounded-xl border border-[#dfd8cb] text-center space-y-3 group hover:border-[#1c1917] transition-colors">
+            <div className="w-10 h-10 mx-auto rounded-full bg-stone-100 text-stone-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Clock className="w-5 h-5 stroke-[1.75]" />
+            </div>
             <h4 className="font-serif-title text-base text-[#1c1917]">Atemporalidad</h4>
             <p className="text-xs text-stone-500 font-serif-body">Prendas duraderas que trascienden las estaciones.</p>
           </div>
 
-          <div className="p-6 bg-white rounded-xl border border-[#dfd8cb] text-center space-y-2">
-            <span className="text-2xl">🕊️</span>
+          <div className="p-6 bg-white rounded-xl border border-[#dfd8cb] text-center space-y-3 group hover:border-[#9c6361] transition-colors">
+            <div className="w-10 h-10 mx-auto rounded-full bg-[#9c6361]/15 text-[#9c6361] flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Feather className="w-5 h-5 stroke-[1.75]" />
+            </div>
             <h4 className="font-serif-title text-base text-[#1c1917]">Calma & Sobriedad</h4>
             <p className="text-xs text-stone-500 font-serif-body">Elegancia sutil y naturalidad sin pretensión.</p>
           </div>

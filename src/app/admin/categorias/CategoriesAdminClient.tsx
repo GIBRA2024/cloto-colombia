@@ -2,6 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { saveCategory, toggleCategoryActive, deleteCategory } from "@/actions/categories";
+import { Search, Edit2, Eye, EyeOff, Trash2, X, AlertCircle } from "lucide-react";
 
 export type CategoryData = {
   id: string;
@@ -133,7 +134,7 @@ export function CategoriesAdminClient({ initialCategories }: CategoriesAdminClie
   const handleDelete = (id: string, name: string, productsCount: number) => {
     let msg = `¿Estás segura de eliminar la categoría "${name}"?`;
     if (productsCount > 0) {
-      msg += `\n\n⚠️ ¡Atención! Hay ${productsCount} producto(s) asignado(s) a esta categoría. Se desvincularán de ella, pero no se borrarán los productos.`;
+      msg += `\n\n¡Atención! Hay ${productsCount} producto(s) asignado(s) a esta categoría. Se desvincularán de ella, pero no se borrarán los productos.`;
     }
 
     if (confirm(msg)) {
@@ -189,8 +190,8 @@ export function CategoriesAdminClient({ initialCategories }: CategoriesAdminClie
       {/* Barra de Filtro Rápido */}
       <div className="flex items-center justify-between gap-4 bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
         <div className="relative flex-1 max-w-md">
-          <span className="absolute inset-y-0 left-3 flex items-center text-stone-400 text-xs">
-            🔍
+          <span className="absolute inset-y-0 left-3 flex items-center text-stone-400 pointer-events-none">
+            <Search className="w-3.5 h-3.5" />
           </span>
           <input
             type="text"
@@ -258,10 +259,10 @@ export function CategoriesAdminClient({ initialCategories }: CategoriesAdminClie
 
                   <button
                     onClick={() => handleOpenEdit(line)}
-                    className="text-[11px] bg-white hover:bg-stone-100 text-stone-700 border border-stone-300 px-2.5 py-1.5 rounded-lg transition-colors"
+                    className="text-[11px] bg-white hover:bg-stone-100 text-stone-700 border border-stone-300 p-1.5 rounded-lg transition-colors flex items-center justify-center"
                     title="Editar línea"
                   >
-                    ✏️
+                    <Edit2 className="w-3.5 h-3.5" />
                   </button>
 
                   <button
@@ -323,7 +324,7 @@ export function CategoriesAdminClient({ initialCategories }: CategoriesAdminClie
                             className="p-1.5 hover:bg-stone-100 rounded text-stone-600 transition-colors"
                             title="Editar nombre o slug"
                           >
-                            ✏️
+                            <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleToggleActive(sub.id, sub.isActive, false, line.id)}
@@ -334,14 +335,14 @@ export function CategoriesAdminClient({ initialCategories }: CategoriesAdminClie
                             }`}
                             title={sub.isActive ? "Desactivar" : "Activar"}
                           >
-                            {sub.isActive ? "👁️" : "🙈"}
+                            {sub.isActive ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                           </button>
                           <button
                             onClick={() => handleDelete(sub.id, sub.name, sub.productsCount)}
                             className="p-1.5 hover:bg-rose-50 rounded text-stone-400 hover:text-rose-600 transition-colors"
                             title="Eliminar subcategoría"
                           >
-                            🗑️
+                            <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       </div>
@@ -370,16 +371,17 @@ export function CategoriesAdminClient({ initialCategories }: CategoriesAdminClie
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-stone-400 hover:text-stone-700 text-lg p-1"
+                className="text-stone-400 hover:text-stone-700 p-1"
+                aria-label="Cerrar"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleSave} className="p-6 space-y-4">
               {error && (
                 <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-lg flex items-center gap-2">
-                  <span>⚠️</span>
+                  <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
                 </div>
               )}

@@ -2,12 +2,14 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { Leaf, Sparkles, Gift } from "lucide-react";
+import { ColombiaFlag, ButterflyIcon } from "@/components/ui/BrandIcons";
 
 export const revalidate = 3600;
 
 export default async function HomePage() {
   // Ejecutar consultas en paralelo para máxima velocidad de respuesta
-  const [featuredProducts, promoProducts, lines] = await Promise.all([
+  const [featuredProducts, promoProducts] = await Promise.all([
     // 1. Obtener productos destacados
     prisma.product.findMany({
       where: {
@@ -32,15 +34,6 @@ export default async function HomePage() {
         variants: { where: { isActive: true } },
       },
       take: 8,
-    }),
-
-    // 3. Obtener las 4 líneas principales
-    prisma.category.findMany({
-      where: {
-        parentId: null,
-        isActive: true,
-      },
-      orderBy: { orderIndex: "asc" },
     }),
   ]);
 
@@ -97,23 +90,31 @@ export default async function HomePage() {
       {/* 2. BARRA DE LOS 4 PILARES DE MARCA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 sm:p-8 bg-white/95 backdrop-blur-md rounded-2xl border border-[#dfd8cb] shadow-lg text-center">
-          <div className="space-y-1.5 border-r border-stone-100 last:border-none">
-            <span className="text-2xl">🌱</span>
+          <div className="space-y-2 border-r border-stone-100 last:border-none px-2 group">
+            <div className="w-10 h-10 mx-auto rounded-full bg-[#8d9773]/10 text-[#5c6643] flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+              <Leaf className="w-5 h-5 stroke-[1.75]" />
+            </div>
             <h4 className="font-serif-title text-sm text-[#1c1917]">Telas Orgánicas & Eco</h4>
             <p className="text-[11px] text-stone-500">Algodón orgánico, seda y fibras recicladas</p>
           </div>
-          <div className="space-y-1.5 border-r border-stone-100 last:border-none">
-            <span className="text-2xl">🇨🇴</span>
+          <div className="space-y-2 border-r border-stone-100 last:border-none px-2 group">
+            <div className="w-10 h-10 mx-auto rounded-full bg-amber-500/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+              <ColombiaFlag className="w-5 h-5" />
+            </div>
             <h4 className="font-serif-title text-sm text-[#1c1917]">100% Colombiano</h4>
             <p className="text-[11px] text-stone-500">Diseñado y confeccionado localmente</p>
           </div>
-          <div className="space-y-1.5 border-r border-stone-100 last:border-none">
-            <span className="text-2xl">✨</span>
+          <div className="space-y-2 border-r border-stone-100 last:border-none px-2 group">
+            <div className="w-10 h-10 mx-auto rounded-full bg-[#b6a450]/15 text-[#8c7b30] flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+              <Sparkles className="w-5 h-5 stroke-[1.75]" />
+            </div>
             <h4 className="font-serif-title text-sm text-[#1c1917]">Diseño con Propósito</h4>
             <p className="text-[11px] text-stone-500">Un estilo de vida que elige mejor</p>
           </div>
-          <div className="space-y-1.5">
-            <span className="text-2xl">🎁</span>
+          <div className="space-y-2 px-2 group">
+            <div className="w-10 h-10 mx-auto rounded-full bg-[#9c6361]/15 text-[#9c6361] flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+              <Gift className="w-5 h-5 stroke-[1.75]" />
+            </div>
             <h4 className="font-serif-title text-sm text-[#1c1917]">Detalles que Enamoran</h4>
             <p className="text-[11px] text-stone-500">Regalo de scrunchie o balaca en cada pijama</p>
           </div>
@@ -526,7 +527,9 @@ export default async function HomePage() {
 
       {/* 7. MANIFIESTO DE MARCA EDITORIAL (Manual de Marca) */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 py-12">
-        <span className="text-2xl">🦋</span>
+        <div className="w-12 h-12 mx-auto rounded-full bg-[#8d9773]/10 text-[#5c6643] flex items-center justify-center">
+          <ButterflyIcon className="w-6 h-6" />
+        </div>
         <h2 className="font-serif-title text-3xl sm:text-4xl text-[#1c1917] leading-snug">
           &ldquo;Creemos en una moda que habla bajito pero deja huella —hecha con intención, respeto por el entorno y amor por los detalles.&rdquo;
         </h2>
@@ -565,8 +568,8 @@ export default async function HomePage() {
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-serif-title">
-              @la.econstantino ✨
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-serif-title tracking-wider">
+              @la.econstantino
             </div>
           </div>
 
@@ -577,8 +580,8 @@ export default async function HomePage() {
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-serif-title">
-              @sofigarcesc 🌿
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-serif-title tracking-wider">
+              @sofigarcesc
             </div>
           </div>
 
@@ -589,8 +592,8 @@ export default async function HomePage() {
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-serif-title">
-              @cirlepelobueno ☀️
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-serif-title tracking-wider">
+              @cirlepelobueno
             </div>
           </div>
 
@@ -601,8 +604,8 @@ export default async function HomePage() {
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-serif-title">
-              @eleonora.morales 🕊️
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-serif-title tracking-wider">
+              @eleonora.morales
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { AlertTriangle, ShoppingCart } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -104,8 +105,9 @@ export default async function AdminDashboardPage() {
         {/* Alertas de Inventario Crítico */}
         <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center border-b border-stone-100 pb-3">
-            <h2 className="font-serif-title text-lg text-stone-900">
-              ⚠️ Alertas de Stock Bajo (&le; 5 unidades)
+            <h2 className="font-serif-title text-lg text-stone-900 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
+              <span>Alertas de Stock Bajo (&le; 5 unidades)</span>
             </h2>
             <Link href="/admin/inventario" className="text-xs text-[#b6a450] hover:underline">
               Ver todo &rarr;
@@ -136,8 +138,9 @@ export default async function AdminDashboardPage() {
         {/* Últimos Pedidos Recibidos */}
         <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center border-b border-stone-100 pb-3">
-            <h2 className="font-serif-title text-lg text-stone-900">
-              🛒 Últimos Pedidos
+            <h2 className="font-serif-title text-lg text-stone-900 flex items-center gap-2">
+              <ShoppingCart className="w-5 h-5 text-[#b6a450] shrink-0" />
+              <span>Últimos Pedidos</span>
             </h2>
             <Link href="/admin/pedidos" className="text-xs text-[#b6a450] hover:underline">
               Ver todos &rarr;

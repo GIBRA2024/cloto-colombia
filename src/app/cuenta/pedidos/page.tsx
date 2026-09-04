@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getCurrentProfile } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { Package, Truck } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -48,7 +49,7 @@ export default async function CustomerOrdersPage() {
 
       {orders.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-[#dfd8cb] p-8 space-y-3">
-          <span className="text-3xl">📦</span>
+          <Package className="w-10 h-10 text-stone-300 mx-auto stroke-[1.5]" />
           <h3 className="font-serif-title text-lg text-stone-800">
             No tienes pedidos registrados
           </h3>
@@ -120,8 +121,9 @@ export default async function CustomerOrdersPage() {
 
                 {order.trackingNumber && (
                   <div className="p-3 bg-[#f0f3eb] rounded-lg text-xs text-[#5c6643] flex items-center justify-between">
-                    <span>
-                      🚚 <strong>Guía de envío:</strong> {order.carrier || "Coordinadora / Servientrega"} #{order.trackingNumber}
+                    <span className="flex items-center gap-2">
+                      <Truck className="w-4 h-4 shrink-0" />
+                      <span><strong>Guía de envío:</strong> {order.carrier || "Coordinadora / Servientrega"} #{order.trackingNumber}</span>
                     </span>
                   </div>
                 )}

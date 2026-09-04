@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Lora, Geist } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 import { StoreLayoutWrapper } from "@/components/layout/StoreLayoutWrapper";
 
 const playfair = Playfair_Display({
@@ -49,7 +50,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-serif-body bg-[#f2f1e7] text-[#1c1917]">
         <CartProvider>
-          <StoreLayoutWrapper>{children}</StoreLayoutWrapper>
+          <WishlistProvider>
+            <StoreLayoutWrapper>{children}</StoreLayoutWrapper>
+          </WishlistProvider>
         </CartProvider>
       </body>
     </html>

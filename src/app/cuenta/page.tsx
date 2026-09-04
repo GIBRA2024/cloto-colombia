@@ -4,6 +4,8 @@ import { getCurrentProfile } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { logoutAction } from "@/actions/auth";
+import { MapPin, Package, MessageCircle, ShoppingBag, Heart } from "lucide-react";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +33,10 @@ export default async function AccountPage() {
     where: { profileId: profile.id },
   });
 
+  const wishlistCount = await prisma.wishlistItem.count({
+    where: { profileId: profile.id },
+  });
+
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 font-sans-ui space-y-10">
       {/* Cabecera del Perfil */}
@@ -40,7 +46,7 @@ export default async function AccountPage() {
             Portal de Cliente
           </span>
           <h1 className="font-serif-title text-3xl sm:text-4xl text-[#1c1917]">
-            Hola, {profile.firstName || "Querida Clienta"} ✨
+            Hola, {profile.firstName || "Querida Clienta"}
           </h1>
           <p className="font-serif-body text-xs text-stone-600">
             {profile.email} • {profile.role === "ADMIN" ? "Rol Administrador" : "Clienta VIP"}
@@ -69,14 +75,14 @@ export default async function AccountPage() {
       </div>
 
       {/* Tarjetas de Accesos Rápidos */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Libreta de Direcciones */}
         <Link
           href="/cuenta/direcciones"
           className="p-6 bg-white rounded-2xl border border-[#dfd8cb] shadow-sm hover:shadow-md hover:border-[#b6a450] transition-all space-y-3 group"
         >
-          <div className="w-10 h-10 rounded-xl bg-[#f7f3e1] flex items-center justify-center text-lg text-[#8c7b30]">
-            📍
+          <div className="w-10 h-10 rounded-xl bg-[#f7f3e1] flex items-center justify-center text-[#8c7b30]">
+            <MapPin className="w-5 h-5" />
           </div>
           <h3 className="font-serif-title text-lg text-[#1c1917] group-hover:text-[#b6a450] transition-colors">
             Libreta de Direcciones
@@ -94,8 +100,8 @@ export default async function AccountPage() {
           href="/cuenta/pedidos"
           className="p-6 bg-white rounded-2xl border border-[#dfd8cb] shadow-sm hover:shadow-md hover:border-[#b6a450] transition-all space-y-3 group"
         >
-          <div className="w-10 h-10 rounded-xl bg-[#f0f3eb] flex items-center justify-center text-lg text-[#5c6643]">
-            📦
+          <div className="w-10 h-10 rounded-xl bg-[#f0f3eb] flex items-center justify-center text-[#5c6643]">
+            <Package className="w-5 h-5" />
           </div>
           <h3 className="font-serif-title text-lg text-[#1c1917] group-hover:text-[#b6a450] transition-colors">
             Historial de Pedidos
@@ -108,15 +114,34 @@ export default async function AccountPage() {
           </span>
         </Link>
 
+        {/* Mis Favoritos (Wishlist) */}
+        <Link
+          href="/cuenta/favoritos"
+          className="p-6 bg-white rounded-2xl border border-[#dfd8cb] shadow-sm hover:shadow-md hover:border-[#9c6361] transition-all space-y-3 group"
+        >
+          <div className="w-10 h-10 rounded-xl bg-[#f8eeed] flex items-center justify-center text-[#9c6361]">
+            <Heart className="w-5 h-5" />
+          </div>
+          <h3 className="font-serif-title text-lg text-[#1c1917] group-hover:text-[#9c6361] transition-colors">
+            Mis Favoritos
+          </h3>
+          <p className="text-xs text-stone-500 font-serif-body">
+            Tienes <strong>{wishlistCount}</strong> {wishlistCount === 1 ? "artículo guardado" : "artículos guardados"} en tu lista de deseos.
+          </p>
+          <span className="text-xs text-[#9c6361] font-semibold block pt-1">
+            Ver mis favoritos &rarr;
+          </span>
+        </Link>
+
         {/* Asesoría VIP WhatsApp */}
         <a
-          href="https://wa.me/573100000000"
+          href={getWhatsAppLink()}
           target="_blank"
           rel="noopener noreferrer"
           className="p-6 bg-white rounded-2xl border border-[#dfd8cb] shadow-sm hover:shadow-md hover:border-[#25D366] transition-all space-y-3 group"
         >
-          <div className="w-10 h-10 rounded-xl bg-[#25D366]/15 flex items-center justify-center text-lg text-[#128C7E]">
-            💬
+          <div className="w-10 h-10 rounded-xl bg-[#25D366]/15 flex items-center justify-center text-[#128C7E]">
+            <MessageCircle className="w-5 h-5" />
           </div>
           <h3 className="font-serif-title text-lg text-[#1c1917] group-hover:text-[#128C7E] transition-colors">
             Asesoría Personalizada
@@ -143,7 +168,7 @@ export default async function AccountPage() {
 
         {recentOrders.length === 0 ? (
           <div className="text-center py-10 space-y-3">
-            <span className="text-3xl">👗</span>
+            <ShoppingBag className="w-8 h-8 text-stone-300 mx-auto stroke-[1.5]" />
             <p className="font-serif-body text-xs text-stone-500">
               Aún no has realizado ninguna compra en Cloto Colombia.
             </p>

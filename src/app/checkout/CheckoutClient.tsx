@@ -8,6 +8,8 @@ import { useCart } from "@/context/CartContext";
 import { validateCoupon } from "@/actions/coupons";
 import { createOrder } from "@/actions/orders";
 import { saveAddress } from "@/actions/addresses";
+import { ShoppingBag, AlertCircle, Lock, ArrowRight } from "lucide-react";
+import { ColombiaFlag } from "@/components/ui/BrandIcons";
 
 type SavedAddress = {
   id: string;
@@ -167,7 +169,9 @@ export function CheckoutClient({ userProfile, savedAddresses }: CheckoutClientPr
   if (items.length === 0) {
     return (
       <div className="max-w-xl mx-auto px-4 py-24 text-center space-y-4 font-sans-ui">
-        <span className="text-4xl">🛍️</span>
+        <div className="w-16 h-16 mx-auto rounded-full bg-stone-100 flex items-center justify-center text-stone-400">
+          <ShoppingBag className="w-8 h-8 stroke-[1.5]" />
+        </div>
         <h1 className="font-serif-title text-3xl text-[#1c1917]">Tu carrito está vacío</h1>
         <p className="font-serif-body text-xs text-stone-600">
           No tienes prendas seleccionadas para finalizar la compra.
@@ -195,7 +199,7 @@ export function CheckoutClient({ userProfile, savedAddresses }: CheckoutClientPr
 
       {errorMessage && (
         <div className="p-4 bg-[#f8eeed] border border-[#d59f9e] text-[#834442] text-xs rounded-xl flex items-center gap-2">
-          <span>⚠️</span>
+          <AlertCircle className="w-4 h-4 shrink-0 text-[#834442]" />
           <span>{errorMessage}</span>
         </div>
       )}
@@ -571,14 +575,21 @@ export function CheckoutClient({ userProfile, savedAddresses }: CheckoutClientPr
               type="button"
               disabled={isPending}
               onClick={handlePlaceOrder}
-              className="w-full bg-[#1c1917] hover:bg-[#b6a450] text-[#f2f1e7] text-xs uppercase tracking-widest font-bold py-4 rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 bg-[#1c1917] hover:bg-[#b6a450] text-[#f2f1e7] text-xs uppercase tracking-widest font-bold py-4 rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl disabled:opacity-50"
             >
-              {isPending ? "Confirmando pedido..." : "Confirmar y Realizar Pedido &rarr;"}
+              <span>{isPending ? "Confirmando pedido..." : "Confirmar y Realizar Pedido"}</span>
+              {!isPending && <ArrowRight className="w-4 h-4 shrink-0" />}
             </button>
 
-            <div className="text-center text-[10px] text-stone-400 space-y-1">
-              <p>🔒 Tus datos están protegidos con cifrado de 256 bits.</p>
-              <p>🇨🇴 Despachos locales desde Colombia.</p>
+            <div className="text-center text-[10px] text-stone-400 space-y-1.5 pt-1">
+              <p className="flex items-center justify-center gap-1.5">
+                <Lock className="w-3 h-3 text-stone-400 shrink-0" />
+                <span>Tus datos están protegidos con cifrado de 256 bits.</span>
+              </p>
+              <p className="flex items-center justify-center gap-1.5">
+                <ColombiaFlag className="w-3.5 h-3.5" />
+                <span>Despachos locales desde Colombia.</span>
+              </p>
             </div>
           </div>
         </div>

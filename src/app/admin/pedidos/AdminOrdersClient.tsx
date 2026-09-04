@@ -2,6 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { updateOrderStatus } from "@/actions/orders";
+import { Check, MapPin, Truck } from "lucide-react";
 
 type OrderItem = {
   id: string;
@@ -103,7 +104,7 @@ export function AdminOrdersClient({ initialOrders }: { initialOrders: OrderItem[
 
       {feedback && (
         <div className="p-3 bg-[#f0f3eb] border border-[#b2bc98] text-[#5c6643] rounded-lg font-medium flex items-center gap-2">
-          <span>✓</span>
+          <Check className="w-4 h-4 shrink-0 text-[#5c6643]" />
           <span>{feedback}</span>
         </div>
       )}
@@ -190,8 +191,9 @@ export function AdminOrdersClient({ initialOrders }: { initialOrders: OrderItem[
                     <h4 className="font-semibold uppercase tracking-wider text-[10px] text-stone-500">
                       Entrega & Totales:
                     </h4>
-                    <p className="text-stone-700">
-                      📍 {order.shippingAddress?.streetAddress} {order.shippingAddress?.apartmentSuite ? `, ${order.shippingAddress.apartmentSuite}` : ""}, {order.shippingAddress?.city}, {order.shippingAddress?.stateProvince}
+                    <p className="text-stone-700 flex items-start gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-stone-400 shrink-0 mt-0.5" />
+                      <span>{order.shippingAddress?.streetAddress} {order.shippingAddress?.apartmentSuite ? `, ${order.shippingAddress.apartmentSuite}` : ""}, {order.shippingAddress?.city}, {order.shippingAddress?.stateProvince}</span>
                     </p>
                     <div className="flex justify-between font-bold text-stone-900 pt-1 border-t border-stone-100">
                       <span>Total Pagado:</span>
@@ -202,7 +204,10 @@ export function AdminOrdersClient({ initialOrders }: { initialOrders: OrderItem[
 
                 {/* Formulario de Guía de Transporte */}
                 <div className="pt-3 border-t border-stone-100 flex flex-col sm:flex-row items-center gap-2 bg-stone-50/50 p-3 rounded-xl">
-                  <span className="font-semibold text-stone-700">🚚 Asignar Guía:</span>
+                  <span className="font-semibold text-stone-700 flex items-center gap-1.5">
+                    <Truck className="w-4 h-4 text-stone-700 shrink-0" />
+                    <span>Asignar Guía:</span>
+                  </span>
                   <input
                     type="text"
                     placeholder="Transportadora (ej: Coordinadora)"

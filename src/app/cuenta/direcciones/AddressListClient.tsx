@@ -2,6 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { saveAddress, deleteAddress, setDefaultAddress } from "@/actions/addresses";
+import { MapPin, X } from "lucide-react";
 
 type Address = {
   id: string;
@@ -102,7 +103,7 @@ export function AddressListClient({ addresses }: { addresses: Address[] }) {
 
       {addresses.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-[#dfd8cb] p-8 space-y-3">
-          <span className="text-3xl">📍</span>
+          <MapPin className="w-10 h-10 text-stone-300 mx-auto stroke-[1.5]" />
           <h3 className="font-serif-title text-lg text-stone-800">
             No tienes direcciones registradas
           </h3>
@@ -190,9 +191,10 @@ export function AddressListClient({ addresses }: { addresses: Address[] }) {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-stone-400 hover:text-stone-700"
+                className="p-1 text-stone-400 hover:text-stone-700 transition-colors"
+                aria-label="Cerrar modal"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
 
